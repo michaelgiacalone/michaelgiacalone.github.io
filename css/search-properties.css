@@ -1,0 +1,135 @@
+/* Search Properties — on-site wrapper (iframe + hero) */
+
+body {
+    background: #fff;
+    font-family: 'Libre Franklin', sans-serif;
+}
+
+@media screen and (min-width: 1201px) {
+    .s-header__navigation .s-header__nav,
+    .s-header__navigation .s-header__nav-wrap {
+        display: flex;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+    }
+    .s-header__navigation .s-header__nav a {
+        color: #fff !important;
+        font-size: 1.6rem;
+    }
+    .s-header__navigation .s-header__nav li {
+        padding: 0 1.4rem;
+    }
+    .s-header__navigation .s-header__nav a:hover {
+        color: rgba(255, 255, 255, 0.85) !important;
+    }
+    .s-header__navigation .s-header__nav li.has-children > a::after {
+        border-bottom-color: #fff;
+        border-right-color: #fff;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .s-header__menu-toggle {
+        color: #fff;
+    }
+    .s-header__menu-toggle span,
+    .s-header__menu-toggle span::before,
+    .s-header__menu-toggle span::after {
+        background-color: #fff !important;
+    }
+    .s-header__menu-toggle.is-clicked span::before,
+    .s-header__menu-toggle.is-clicked span::after {
+        background-color: #111 !important;
+    }
+    .s-header__nav-wrap .s-header__nav {
+        display: block !important;
+        padding: 0 8vw 2rem;
+    }
+    .s-header__nav-wrap .s-header__nav > li {
+        display: block !important;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .s-header__nav-wrap .s-header__nav > li:last-child {
+        border-bottom: none;
+    }
+    .s-header__nav-wrap .s-header__nav > li > a {
+        color: #111 !important;
+        font-size: 1.5rem;
+        display: block;
+        padding: 0.4rem 0 0.4rem 2.4rem;
+    }
+    .s-header__nav-wrap .s-header__nav .sub-menu li a {
+        color: #333 !important;
+    }
+    .s-header__nav-wrap .s-header__nav > li > a[href^="tel:"],
+    .s-header__nav-wrap .s-header__nav > li:last-child > a {
+        font-size: 1.4rem;
+        padding-top: 0.6rem;
+        padding-bottom: 0.6rem;
+    }
+}
+
+.s-header__branding .site-title img {
+    max-height: 64px;
+    width: auto;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.blog-hero {
+    background: #002348;
+    padding: 9rem 2rem 5rem;
+    text-align: center;
+    color: #fff;
+}
+
+.blog-hero__eyebrow {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 1.2rem;
+}
+
+.blog-hero__title {
+    font-size: clamp(3rem, 5.2vw, 5.2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 0 1.4rem;
+    color: #fff;
+}
+
+.blog-hero__subtitle {
+    font-size: 1.5rem;
+    line-height: 1.65;
+    max-width: 640px;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.page-search-properties .idx-embed-wrap {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    line-height: 0;
+}
+
+.page-search-properties .idx-embed {
+    width: 100%;
+    min-height: 85vh;
+    height: 1200px;
+    border: 0;
+    display: block;
+}
+
+@media screen and (max-width: 768px) {
+    .page-search-properties .idx-embed {
+        min-height: 70vh;
+        height: 900px;
+    }
+}

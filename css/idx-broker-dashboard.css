@@ -1,0 +1,168 @@
+/*
+ * IDX Broker — Custom CSS (paste into IDX: Design → Customize → Custom CSS)
+ * Matches Arpin & Giacalone site: Libre Franklin, navy/black accents, minimal luxury.
+ * After deploy, also host this file and add its URL in IDX if your plan supports an external stylesheet.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
+
+body,
+button,
+input,
+select,
+textarea,
+.IDX-wrapper-standard,
+#IDX-main {
+    font-family: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+body {
+    background: #ffffff !important;
+    color: #222222 !important;
+}
+
+#IDX-main.IDX-wrapper-standard {
+    background: #ffffff !important;
+}
+
+/* Top actions */
+.IDX-topAction .IDX-btn--link,
+.IDX-topAction .IDX-resultsAction {
+    font-weight: 600 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+    color: #111111 !important;
+    background: transparent !important;
+    border: 1px solid #111111 !important;
+    border-radius: 0 !important;
+}
+
+.IDX-topAction .IDX-btn--link:hover,
+.IDX-topAction .IDX-resultsAction:hover {
+    background: #111111 !important;
+    color: #ffffff !important;
+}
+
+/* Refinement bar */
+.idx-results__refinement,
+#idx-results-refinement {
+    background: #fafafa !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+}
+
+#idx-results-refinement-title,
+.idx-results-refinement__title {
+    font-weight: 700 !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase !important;
+    font-size: 0.72rem !important;
+    color: #111111 !important;
+}
+
+.IDX-btn-primary,
+.IDX-btn.IDX-btn-primary {
+    background: #111111 !important;
+    border-color: #111111 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    border-radius: 0 !important;
+    font-size: 0.72rem !important;
+}
+
+.IDX-btn-primary:hover,
+.IDX-btn.IDX-btn-primary:hover {
+    background: #002348 !important;
+    border-color: #002348 !important;
+    color: #ffffff !important;
+}
+
+.IDX-btn__PL--inverse {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #111111 !important;
+}
+
+.IDX-btn-link {
+    color: #111111 !important;
+    font-weight: 600 !important;
+}
+
+/* Results header */
+.idx-results-total__heading,
+.idx-results-total__heading h4,
+.idx-results__total h4 {
+    font-family: 'Libre Franklin', sans-serif !important;
+    font-weight: 700 !important;
+    color: #111111 !important;
+    letter-spacing: -0.02em !important;
+}
+
+/* Alert strip */
+.IDX-alert.IDX-results__alert,
+.IDX-alert-info {
+    background: #f4f4f4 !important;
+    border: none !important;
+    color: #444444 !important;
+    font-size: 0.95rem !important;
+}
+
+/* Listing cards */
+.idx-listing-card {
+    font-family: 'Libre Franklin', sans-serif !important;
+}
+
+.idx-listing-card__price {
+    font-family: 'Libre Franklin', sans-serif !important;
+    font-weight: 700 !important;
+    color: #111111 !important;
+    font-size: 1.35rem !important;
+    letter-spacing: -0.02em !important;
+}
+
+.idx-listing-card__address,
+.idx-listing-card__address span {
+    color: #333333 !important;
+    font-weight: 500 !important;
+}
+
+.idx-label {
+    color: #777777 !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    font-size: 0.65rem !important;
+}
+
+.idx-text {
+    color: #222222 !important;
+}
+
+.idx-results__category--title {
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+    color: #111111 !important;
+}
+
+/* Map toggle */
+#idx-results-map-toggle {
+    border-radius: 0 !important;
+}
+
+/* Form fields in refinement */
+.idx-dropdown__menu input[type='text'],
+.IDX-searchForm input[type='text'] {
+    font-family: 'Libre Franklin', sans-serif !important;
+    border-radius: 0 !important;
+    border-color: #cccccc !important;
+}
+
+/* Links */
+a.IDX-btn--link,
+.idx-listing-card a {
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
