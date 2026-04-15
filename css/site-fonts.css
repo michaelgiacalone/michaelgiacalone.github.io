@@ -1,0 +1,115 @@
+/* Local brand fonts — paths relative to /css/ */
+@font-face {
+    font-family: "Benton Sans";
+    src: url("../Fonts/Font Bureau - BentonSans-Thin.otf") format("opentype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Benton Sans";
+    src: url("../Fonts/Font Bureau - BentonSans-ExtraLight.otf") format("opentype");
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Benton Sans";
+    src: url("../Fonts/Font Bureau - BentonSans-ExtraLightItalic.otf") format("opentype");
+    font-weight: 200;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Benton Sans";
+    src: url("../Fonts/Font Bureau - BentonSans-Light.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Benton Sans";
+    src: url("../Fonts/Font Bureau - BentonSans-LightItalic.otf") format("opentype");
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Benton Sans";
+    src: url("../Fonts/Font Bureau - BentonSans-Book.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Benton Sans";
+    src: url("../Fonts/Font Bureau - BentonSans-BookItalic.otf") format("opentype");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Benton Sans";
+    src: url("../Fonts/Font Bureau - BentonSans-Regular.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Benton Sans";
+    src: url("../Fonts/Font Bureau - BentonSans-Medium.otf") format("opentype");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Benton Sans";
+    src: url("../Fonts/Font Bureau - BentonSans-MediumItalic.otf") format("opentype");
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Benton Sans";
+    src: url("../Fonts/Font Bureau - BentonSans-Bold.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Mercury Display";
+    src: url("../Fonts/MercuryDisplay-Roman.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Mercury Display";
+    src: url("../Fonts/MercuryDisplay-Italic.otf") format("opentype");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Mercury Display";
+    src: url("../Fonts/MercuryDisplay-Semibold.otf") format("opentype");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Mercury Display";
+    src: url("../Fonts/MercuryDisplay-SemIta.otf") format("opentype");
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Premier Display";
+    src: url("../Fonts/Premier Display.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
