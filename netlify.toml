@@ -1,6 +1,0 @@
-# Static site: no build step. Functions live in netlify/functions/.
-[build]
-  publish = "."
-
-[functions]
-  directory = "netlify/functions"
