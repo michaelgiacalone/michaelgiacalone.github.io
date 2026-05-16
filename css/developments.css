@@ -127,7 +127,7 @@
 .page-developments .dev-card:hover .dev-card__overlay { opacity: 0.94; }
 
 .page-developments .dev-card__title {
-    font-family: var(--font-serif, "Mercury Display", Georgia, serif);
+    font-family: var(--font-serif, "Segoe UI", sans-serif);
     font-size: clamp(1.55rem, 2.2vw, 1.95rem);
     font-weight: 600;
     line-height: 1.25;
@@ -137,8 +137,8 @@
 }
 
 .page-developments .dev-card__tagline {
-    font-size: 1.28rem;
-    line-height: 1.6;
+    font-size: 1.5rem;
+    line-height: 1.75;
     color: rgba(255,255,255,0.88);
     margin: 0 0 1.55rem;
 }
@@ -174,7 +174,7 @@
 }
 
 .page-developments .dev-outro h2 {
-    font-family: var(--font-serif, "Mercury Display", Georgia, serif);
+    font-family: var(--font-serif, "Segoe UI", sans-serif);
     font-size: clamp(1.85rem, 3vw, 2.35rem);
     font-weight: 600;
     line-height: 1.25;
@@ -183,8 +183,8 @@
 }
 
 .page-developments .dev-outro p {
-    font-size: 1.35rem;
-    line-height: 1.65;
+    font-size: 1.5rem;
+    line-height: 1.75;
     color: rgba(255, 255, 255, 0.88);
     margin: 0 0 1.75rem;
 }

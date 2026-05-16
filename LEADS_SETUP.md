@@ -16,7 +16,7 @@ In Netlify site settings, add:
 - `RESEND_API_KEY` - your Resend API key
 - `RESEND_FROM` - sender email (for example `Leads <leads@yourdomain.com>`)
 - `RESEND_TO` - fallback recipient email
-- `DEFAULT_FIRM` - default firm label for subject/body (example: `Arpin & Giacalone`)
+- `DEFAULT_FIRM` - default firm label for subject/body (example: `ARG Naples`)
 
 Optional (for multiple firms with one codebase):
 
@@ -26,7 +26,7 @@ Example:
 
 ```json
 {
-  "Arpin & Giacalone": "team-a@example.com",
+  "ARG Naples": "team-a@example.com",
   "Another Firm": "team-b@example.com"
 }
 ```

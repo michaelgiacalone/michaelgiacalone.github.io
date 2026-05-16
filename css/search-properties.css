@@ -2,7 +2,7 @@
 
 body {
     background: #fff;
-    font-family: var(--font-body, "Benton Sans", sans-serif);
+    font-family: var(--font-body, "Segoe UI", sans-serif);
 }
 
 @media screen and (min-width: 1201px) {

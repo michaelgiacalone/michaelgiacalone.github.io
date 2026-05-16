@@ -1,7 +1,7 @@
 /* Shared with Insights blog posts — used by blogPost.html patterns and blog-sample-*.html */
 
 /* ── Base ── */
-body { background: #fff; font-family: var(--font-body, "Benton Sans", sans-serif); }
+body { background: #fff; font-family: var(--font-body, "Segoe UI", sans-serif); }
 
 /* ── Header nav (desktop) ── */
 @media screen and (min-width: 1201px) {

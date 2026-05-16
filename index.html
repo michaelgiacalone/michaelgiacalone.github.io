@@ -4,7 +4,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Arpin & Giacalone</title>
+    <title>ARG Naples</title>
 
     <script>
         document.documentElement.classList.remove('no-js');
@@ -17,11 +17,11 @@
     <link rel="stylesheet" href="realestate.css">
 
     <style>
-        /* newIndex only: hero video ~80% of default full-viewport height */
+        /* Hero video: midpoint between 40vh and former 80vh */
         body.page-new-home .hero,
         body.page-new-home .hero__slider {
-            height: 80vh;
-            min-height: calc(20.4 * var(--space));
+            height: 60vh;
+            min-height: calc(15.3 * var(--space));
         }
     </style>
 
@@ -52,17 +52,23 @@
                         <li class="has-children">
                             <a href="#0" title="">Featured Neighborhoods</a>
                             <ul class="sub-menu" style="color: white">
-                                <li><a href="communities/port.html">PORT ROYAL</a></li>
-                                <li><a href="communities/aqualane.html">AQUALANE SHORES</a></li>
-                                <li><a href="communities/olde.html">OLDE NAPLES</a></li>
-                                <li><a href="communities/moorings.html">THE MOORINGS</a></li>
-                                <li><a href="communities/park.html">PARK SHORE</a></li>
-                                <li><a href="communities/pelican.html">PELICAN BAY</a></li>
+                                <li><a href="communities/port.html">Port Royal</a></li>
+                                <li><a href="communities/aqualane.html">Aqualane Shores</a></li>
+                                <li><a href="communities/olde.html">Olde Naples</a></li>
+                                <li><a href="communities/moorings.html">The Moorings</a></li>
+                                <li><a href="communities/park.html">Park Shore</a></li>
+                                <li><a href="communities/pelican.html">Pelican Bay</a></li>
                             </ul>
                         </li>
                         <li><a href="soldProperties.html" title="">Significant Sales</a></li>
                         <li><a href="developments.html" title="">New Developments</a></li>
-                        <li><a href="blog.html" title="">Insights</a></li>
+                        <li class="has-children">
+                            <a href="#0" title="">Resources</a>
+                            <ul class="sub-menu" style="color: white">
+                                <li><a href="blog.html">Insights</a></li>
+                                <li><a href="single-video.html">Request A Private Market Evaluation</a></li>
+                            </ul>
+                        </li>
                         <li><a href="about.html" title="">About Us</a></li>
                     </ul>
                 </nav>
@@ -103,16 +109,8 @@
                         </article>
                     </div>
 
-                    <div class="swiper-pagination"></div>
                 </div>
 
-                <a href="#featured-neighborhoods" class="hero__scroll-down smoothscroll">
-                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.25 6.75L4.75 12L10.25 17.25"></path>
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.25 12H5"></path>
-                    </svg>
-                    <span>Scroll</span>
-                </a>
             </div>
             <!-- end hero -->
 
@@ -166,15 +164,14 @@
                 <!-- End Featured Neighborhoods Section -->
 
                 <!-- $62M Featured Sale Section -->
-                <div class="featured-sale" style="width: 80%; margin: 5rem auto; display: flex; gap: 4rem; align-items: center;">
+                <div class="featured-sale" style="display: flex; gap: 4rem; align-items: center;">
                     <div style="flex: 1;">
-                        <p style="font-size: 1.2rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #999; margin-bottom: 0.5rem;">Significant Sales</p>
                         <h2 style="font-size: 2.6rem; font-weight: 700; line-height: 1.2; margin-bottom: 1.5rem; color: #111;">Record-Breaking<br>$62M Naples Sale</h2>
                         <div style="width: 48px; height: 3px; background: #111; margin-bottom: 2rem;"></div>
-                        <p style="font-size: 12px; line-height: 1.8; color: #444; margin-bottom: 1.5rem;">
+                        <p style="font-size: 1.5rem; line-height: 1.75; color: #444; margin-bottom: 1.5rem;">
                             In 2022, Paul Arpin of Premier Sotheby's International Realty orchestrated a landmark transaction in Naples real estate — representing both buyer and seller in the $62 million sale of a 16,000+ sq. ft. beachfront estate at 25 16th Ave. S., setting a new record for single-family residential properties and surpassing the previous record by $10 million.
                         </p>
-                        <p style="font-size: 12px; line-height: 1.8; color: #666; margin-bottom: 2rem;">
+                        <p style="font-size: 1.5rem; line-height: 1.75; color: #666; margin-bottom: 2rem;">
                             The six-bedroom estate on 1.5 acres off Gulf Shore Boulevard features dual pools — including a second-floor infinity-edge pool with panoramic Gulf views — lush landscaping, an exercise wing, and a three-car garage.
                         </p>
                         <a href="soldProperties.html" class="featured-sale__btn-desktop" style="display: inline-block; font-size: 16px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #111; text-decoration: none; border-bottom: 2px solid #111; padding-bottom: 0.3em;">View Significant Sales</a>
@@ -187,25 +184,24 @@
                 <!-- End $62M Featured Sale Section -->
 
                 <!-- About Us Section -->
-                <div style="width: 80%; margin: 5rem auto; display: flex; gap: 4rem; align-items: flex-start;">
-                    <div style="flex: 1;">
-                        <p style="font-size: 1.2rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #999; margin-bottom: 0.5rem;">Who We Are</p>
-                        <h2 style="font-size: 3rem; font-weight: 700; line-height: 1.15; margin-bottom: 1.5rem; color: #111;">Local Expertise. Global Connections.</h2>
-                        <div style="width: 48px; height: 3px; background: #111; margin-bottom: 2rem;"></div>
-                        <p style="font-size: 1.8rem; line-height: 1.75; color: #333; margin-bottom: 1.5rem;">
-                            <strong>Arpin &amp; Giacalone</strong> represents the pinnacle of luxury real estate service in Naples, Florida. Blending decades of combined experience, record-breaking results, and unmatched local insight, Michael Giacalone, Paul Arpin, and Peter Reppucci deliver a concierge-level experience for buyers and sellers of exceptional properties.
-                        </p>
-                        <p style="font-size: 1.5rem; line-height: 1.75; color: #555;">
-                            As part of Premier Sotheby's International Realty, the team unites local expertise with global reach — dedicated to integrity, discretion, and truly exceptional results.
-                        </p>
+                <div class="neighborhoods-section home-intro-section">
+                    <div class="neighborhoods-section__header">
+                        <h2 style="font-size: 2.6rem; font-weight: 700; line-height: 1.2; color: #111; margin-bottom: 1rem;">Local Expertise. Global Connections.</h2>
+                        <div style="width: 48px; height: 3px; background: #111;"></div>
                     </div>
+                    <p style="font-size: 1.5rem; line-height: 1.75; color: #444; margin-bottom: 1.5rem;">
+                        Together, Paul Arpin, Peter Reppucci, and Michael Giacalone represent the pinnacle of luxury real estate service in Naples, Florida. Blending decades of combined experience, record-breaking results, and unmatched local insight, this team delivers a concierge-level experience for buyers and sellers of exceptional properties. Their collective backgrounds in sales, construction, marketing, and negotiation allow clients to move seamlessly through each stage of the real estate journey.
+                    </p>
+                    <p style="font-size: 1.5rem; line-height: 1.75; color: #666; margin-bottom: 0;">
+                        As part of Premier Sotheby&apos;s International Realty, these three unite local expertise with global reach. Whether representing a Gulf-front estate, a bespoke new build, or a treasured family residence, the team is dedicated to excellence&mdash;defined by integrity, discretion, and truly exceptional results.
+                    </p>
                 </div>
 
                 <!-- Agent Image Cards -->
                 <div class="img-card-grid">
                     <div class="img-card">
                         <a href="about.html" class="img-card__image-wrap">
-                            <img src="assets/paul.jpg" alt="Paul Arpin">
+                            <img src="assets/test_paul.jpg" alt="Paul Arpin">
                             <span class="img-card__border-t"></span>
                             <span class="img-card__border-b"></span>
                             <span class="img-card__border-l"></span>
@@ -218,7 +214,7 @@
                     </div>
                     <div class="img-card">
                         <a href="about.html" class="img-card__image-wrap">
-                            <img src="assets/pete.jpg" alt="Peter Reppucci">
+                            <img src="assets/test_pete.jpg" alt="Peter Reppucci">
                             <span class="img-card__border-t"></span>
                             <span class="img-card__border-b"></span>
                             <span class="img-card__border-l"></span>
@@ -231,7 +227,7 @@
                     </div>
                     <div class="img-card">
                         <a href="about.html" class="img-card__image-wrap">
-                            <img src="assets/michael.jpg" alt="Michael Giacalone">
+                            <img src="assets/test_michael.jpg" alt="Michael Giacalone">
                             <span class="img-card__border-t"></span>
                             <span class="img-card__border-b"></span>
                             <span class="img-card__border-l"></span>
@@ -246,7 +242,7 @@
 
                 <!-- CTA -->
                 <div class="entry-cta-wrap" style="text-align: center; margin-top: 4rem; margin-bottom: 3rem;">
-                    <a class="tel:239-431-03212" href="single-standard.html">Work With Arpin &amp; Giacalone</a>
+                    <a class="tel:239-431-03212" href="about.html">Work With ARG Naples</a>
                 </div>
 
                 <!-- End About Us Section -->
@@ -254,8 +250,7 @@
                 <!-- Why Work With Us Section -->
                 <div style="width: 100%; margin: 5rem 0; position: relative; background-image: url('https://imageio.forbes.com/specials-images/imageserve/62c0c1804c76e0c3f8e0d85c/Florida-luxury-estate/0x0.jpg?width=960&dpr=2'); background-size: cover; background-position: center; background-attachment: fixed; padding: 8rem 2rem; box-sizing: border-box;">
                     <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.55);"></div>
-                    <div style="position: relative; z-index: 1; max-width: 780px; margin: 0 auto; text-align: center;">
-                        <p style="font-size: 1.2rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 1rem;">The Arpin &amp; Giacalone Difference</p>
+                    <div class="why-work-with-us__inner" style="position: relative; z-index: 1; text-align: center;">
                         <h2 style="font-size: 3.2rem; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 1.5rem;">Why Work With Us</h2>
                         <div style="width: 48px; height: 3px; background: #fff; margin: 0 auto 2rem;"></div>
                         <p style="font-size: 1.5rem; line-height: 1.85; color: rgba(255,255,255,0.88);">
@@ -286,7 +281,7 @@
 
             <div class="row s-footer__main">
                 <div class="column lg-5 md-6 tab-12 s-footer__about">
-                    <h4>Arpin &amp; Giacalone</h4>
+                    <h4>ARG Naples</h4>
                     <p>Our proven performance and exceptional marketing expertise consistently deliver the results our clients desire. This success is reflected in a distinguished record of completed transactions and delighted homeowners across the Naples luxury real estate community.</p>
                 </div>
                 <div class="column lg-5 md-6 tab-12">
@@ -310,7 +305,7 @@
             <div class="row s-footer__bottom">
                 <div class="column lg-12 tab-12">
                     <div class="ss-copyright">
-                        <span>&copy; Copyright Michael Giacalone &amp; Team</span>
+                        <span>&copy; Copyright ARG Naples</span>
                     </div>
                 </div>
             </div>
@@ -332,6 +327,15 @@
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
     <script src="js/subscribe-footer.js"></script>
+    <script>
+        (function () {
+            document.querySelectorAll('body.page-new-home .hero__bg-video').forEach(function (v) {
+                function setRate() { v.playbackRate = 0.7; }
+                setRate();
+                v.addEventListener('loadedmetadata', setRate);
+            });
+        })();
+    </script>
 
     <!-- Private Market Evaluation Modal -->
     <div id="pmeModal" class="pme-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pmeModalTitle">

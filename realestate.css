@@ -1,10 +1,10 @@
 /* ============================================================
-   Arpin & Giacalone — Custom Styles (realestate.css)
+   ARG Naples — Custom Styles (realestate.css)
    ============================================================ */
 
 /* ---- Global typography (Benton body; template --font-2 = Mercury for headings) ---- */
 html {
-    font-family: var(--font-body, "Benton Sans", sans-serif);
+    font-family: var(--font-body, "Segoe UI", sans-serif);
 }
 body {
     font-family: inherit;
@@ -63,7 +63,7 @@ body {
 }
 .hero__name-text {
     margin: 0;
-    font-family: var(--font-display, "Premier Display", "Mercury Display", Georgia, serif);
+    font-family: var(--font-display, "Segoe UI", sans-serif);
     font-size: 4.5rem;
     font-weight: 400;
     letter-spacing: 0.18em;
@@ -77,7 +77,7 @@ body {
 }
 .hero__ampersand-text {
     margin: 0.2em 0;
-    font-family: var(--font-display, "Premier Display", "Mercury Display", Georgia, serif);
+    font-family: var(--font-display, "Segoe UI", sans-serif);
     font-size: 1rem;
     font-weight: 400;
     letter-spacing: 0.55em;
@@ -264,13 +264,13 @@ body.page-realestate .img-card__image-wrap:hover .img-card__btn { opacity: 1; tr
 
 body.page-realestate .img-card__desc { margin-top: 1.25rem; }
 body.page-realestate .img-card__desc h3 {
-    font-family: var(--font-serif, "Mercury Display", Georgia, serif);
+    font-family: var(--font-serif, "Segoe UI", sans-serif);
     font-size: 1.7rem;
     font-weight: 600;
     color: #111;
     margin-bottom: 0.4rem;
 }
-body.page-realestate .img-card__desc p  { font-size: 1.4rem; line-height: 1.7; color: #666; margin: 0; }
+body.page-realestate .img-card__desc p  { font-size: 1.5rem; line-height: 1.75; color: #666; margin: 0; }
 
 /* ---- Significant Sales (desktop spacing fixes) ---- */
 body.page-realestate .featured-sale {
@@ -288,6 +288,46 @@ body.page-realestate .featured-sale > div:first-child {
 }
 body.page-realestate .featured-sale > div:last-child {
     padding-left: 0.75rem;
+}
+
+/* ---- Home page (index): unified content width — match .neighborhoods-section ---- */
+body.page-new-home .neighborhoods-section,
+body.page-new-home .home-content-section,
+body.page-new-home .img-card-grid,
+body.page-new-home .entry-cta-wrap {
+    width: 80%;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+body.page-new-home.page-realestate .featured-sale {
+    width: 80% !important;
+    max-width: none !important;
+}
+body.page-new-home.page-realestate .img-card-grid {
+    width: 80% !important;
+    max-width: none !important;
+}
+body.page-new-home .home-content-section {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+body.page-new-home .why-work-with-us__inner {
+    width: 80%;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+@media screen and (max-width: 1100px) {
+    body.page-new-home.page-realestate .img-card-grid {
+        width: 80% !important;
+    }
+}
+@media screen and (max-width: 768px) {
+    body.page-new-home.page-realestate .img-card-grid {
+        width: 80% !important;
+    }
 }
 
 /* ---- Neighborhoods Grid ---- */
@@ -327,8 +367,8 @@ body.page-realestate .featured-sale > div:last-child {
     color: #fff;
     font-size: 1.2rem;
     font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-transform: none;
     transition: transform 0.35s ease;
 }
 .neighborhood-card:hover .neighborhood-card__name { transform: translateY(-10px); }
@@ -615,9 +655,9 @@ body.page-realestate .featured-sale > div:last-child {
     .pme-modal__title { font-size: 1.3rem; }
 }
 
-/* ---- Page hero titles (Insights, Sold, articles): Mercury Display ---- */
+/* ---- Page hero titles (Insights, Sold, articles) ---- */
 .blog-hero__title,
 .sold-hero__title,
 .post-hero__title {
-    font-family: var(--font-serif, "Mercury Display", Georgia, serif);
+    font-family: var(--font-serif, "Segoe UI", sans-serif);
 }

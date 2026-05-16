@@ -6,7 +6,7 @@
     ================================================== -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>About - Arpin & Giacalone</title>
+    <title>About - ARG Naples</title>
 
     <script>
         document.documentElement.classList.remove('no-js');
@@ -26,8 +26,10 @@
     <link rel="manifest" href="site.webmanifest">
 
     <style>
+        /* Match homepage hero video band (index: 60vh + min-height) */
         .about-hero {
-            min-height: 100vh;
+            height: 60vh;
+            min-height: calc(15.3 * var(--space));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -82,7 +84,7 @@
             <div class="s-header__branding">
                 <p class="site-title">
                     <a href="index.html" rel="home">
-                        <img src="https://cdn-cws.datafloat.com/PSB/images/company/PSB/logo-white.png" alt="Arpin &amp; Giacalone">
+                        <img src="https://cdn-cws.datafloat.com/PSB/images/company/PSB/logo-white.png" alt="ARG Naples">
                     </a>
                 </p>
             </div>
@@ -97,17 +99,23 @@
                         <li class="has-children">
                             <a href="#0" title="">Featured Neighborhoods</a>
                             <ul class="sub-menu" style="color: white">
-                                <li><a href="communities/port.html">PORT ROYAL</a></li>
-                                <li><a href="communities/aqualane.html">AQUALANE SHORES</a></li>
-                                <li><a href="communities/olde.html">OLDE NAPLES</a></li>
-                                <li><a href="communities/moorings.html">THE MOORINGS</a></li>
-                                <li><a href="communities/park.html">PARK SHORE</a></li>
-                                <li><a href="communities/pelican.html">PELICAN BAY</a></li>
+                                <li><a href="communities/port.html">Port Royal</a></li>
+                                <li><a href="communities/aqualane.html">Aqualane Shores</a></li>
+                                <li><a href="communities/olde.html">Olde Naples</a></li>
+                                <li><a href="communities/moorings.html">The Moorings</a></li>
+                                <li><a href="communities/park.html">Park Shore</a></li>
+                                <li><a href="communities/pelican.html">Pelican Bay</a></li>
                             </ul>
                         </li>
                         <li><a href="soldProperties.html" title="">Significant Sales</a></li>
                         <li><a href="developments.html" title="">New Developments</a></li>
-                        <li><a href="blog.html" title="">Insights</a></li>
+                        <li class="has-children">
+                            <a href="#0" title="">Resources</a>
+                            <ul class="sub-menu" style="color: white">
+                                <li><a href="blog.html">Insights</a></li>
+                                <li><a href="single-video.html">Request A Private Market Evaluation</a></li>
+                            </ul>
+                        </li>
                         <li class="current-menu-item"><a href="about.html" title="">About Us</a></li>
                     </ul> <!-- end s-header__nav -->
 
@@ -172,46 +180,48 @@
                 @media screen and (max-width: 860px) {
                     .team-grid { grid-template-columns: 1fr; gap: 5rem; }
                 }
+                /* Same crop frame for all three; tune object-position % to align eyes/chin across the row */
                 .team-card__photo {
                     width: 100%;
                     aspect-ratio: 4 / 5;
                     object-fit: cover;
-                    object-position: center 22%;
                     background: #fff;
                     display: block;
                     margin-bottom: 2rem;
                 }
+                .team-card__photo--paul {
+                    object-position: 50% 16%;
+                }
+                .team-card__photo--pete {
+                    object-position: 50% 22%;
+                }
+                .team-card__photo--michael {
+                    object-position: 50% 14%;
+                }
                 .team-card__name {
-                    font-family: var(--font-serif, "Mercury Display", Georgia, serif);
+                    font-family: var(--font-serif, "Segoe UI", sans-serif);
                     font-size: 2rem;
                     font-weight: 600;
                     color: #002348;
                     letter-spacing: -0.01em;
-                    margin: 0 0 0.4rem;
-                }
-                .team-card__title {
-                    font-size: 0.85rem;
-                    font-weight: 700;
-                    letter-spacing: 0.16em;
-                    text-transform: uppercase;
-                    color: #999;
-                    margin-bottom: 1.6rem;
+                    margin: 0 0 1.6rem;
                 }
                 .team-card__bio {
-                    font-size: 1.15rem;
-                    line-height: 1.8;
+                    font-size: 1.5rem;
+                    line-height: 1.75;
                     color: #444;
                 }
                 .team-card__bio p { margin-bottom: 1.2rem; }
                 .team-card__bio p:last-child { margin-bottom: 0; }
 
                 .about-intro-before-team {
-                    max-width: 900px;
+                    max-width: none;
+                    width: 100%;
                     margin: 0 auto 5rem;
-                    padding: 0 0.25rem;
+                    padding: 0;
                 }
                 .about-intro-before-team h2 {
-                    font-family: var(--font-serif, "Mercury Display", Georgia, serif);
+                    font-family: var(--font-serif, "Segoe UI", sans-serif);
                     font-size: 2rem;
                     font-weight: 600;
                     color: #002348;
@@ -227,7 +237,7 @@
                     margin-top: 0;
                 }
                 .about-intro-before-team p {
-                    font-size: 1.15rem;
+                    font-size: 1.5rem;
                     line-height: 1.85;
                     color: #444;
                     margin-bottom: 1.2rem;
@@ -345,6 +355,41 @@
                     font-weight: 500;
                     line-height: 1.4;
                 }
+
+                /* ── Closing message (below bios) ── */
+                .about-after-bios {
+                    margin-top: 3rem;
+                    padding-top: 3.5rem;
+                    border-top: 1px solid rgba(0, 35, 72, 0.1);
+                    font-size: 1.5rem;
+                    line-height: 1.85;
+                    color: #444;
+                }
+                .about-after-bios p {
+                    margin: 0 0 1.15rem;
+                }
+                .about-after-bios p:last-child {
+                    margin-bottom: 0;
+                }
+                .about-after-bios__phones {
+                    font-weight: 600;
+                    color: #002348;
+                    margin-top: 1.5rem;
+                }
+                .about-after-bios__phones a {
+                    color: #002348;
+                    text-decoration: none;
+                    border-bottom: 1px solid rgba(0, 35, 72, 0.28);
+                    transition: border-color 0.2s ease, color 0.2s ease;
+                }
+                .about-after-bios__phones a:hover {
+                    border-bottom-color: #002348;
+                }
+                .about-after-bios__phones .about-after-bios__sep {
+                    font-weight: 400;
+                    color: #666;
+                    border-bottom: none;
+                }
             </style>
 
             <!-- Team members -->
@@ -361,9 +406,8 @@
                 <div class="team-grid">
 
                     <div class="team-card">
-                        <img class="team-card__photo" src="assets/paul.jpg" alt="Paul Arpin">
+                        <img class="team-card__photo team-card__photo--paul" src="assets/test_paul.jpg" alt="Paul Arpin">
                         <h2 class="team-card__name">Paul Arpin</h2>
-                        <p class="team-card__title">Luxury Real Estate Advisor &nbsp;·&nbsp; Premier Sotheby&apos;s International Realty</p>
                         <div class="team-card__bio">
                             <p>Originally from Michigan, Paul Arpin brings over 25 years of luxury real estate sales and marketing experience to his role at Premier Sotheby&apos;s International Realty. He helps buyers and sellers of world-class, high-end real estate find and sell condominiums and homes from Pelican Bay to Port Royal.</p>
                             <p>Paul found his passion and quickly became one of the top producers in selling apartment buildings in the Chicago marketplace at Inland Real Estate, one of the largest real estate and financial groups in Chicago.</p>
@@ -373,9 +417,8 @@
                     </div>
 
                     <div class="team-card">
-                        <img class="team-card__photo" src="assets/pete.jpg" alt="Peter Reppucci">
+                        <img class="team-card__photo team-card__photo--pete" src="assets/test_pete.jpg" alt="Peter Reppucci">
                         <h2 class="team-card__name">Peter Reppucci</h2>
-                        <p class="team-card__title">Global Real Estate Advisor &nbsp;·&nbsp; Premier Sotheby&apos;s International Realty</p>
                         <div class="team-card__bio">
                             <p>Peter Reppucci, global real estate advisor in Premier Sotheby&apos;s International Realty&apos;s Broad Avenue office, began his career in Naples in 1993 and quickly became active in the development and marketing of luxury real estate in the exclusive neighborhoods of Port Royal, Old Naples, The Moorings and Park Shore.</p>
                             <p>He is respected by customers and colleagues alike for his knowledge and expertise in the Naples luxury home market, and for his skill in understanding the needs of the homebuyer and the seller. Peter has consistently participated in many of the larger sales transactions in Collier County, earning him numerous sales awards throughout his career.</p>
@@ -385,9 +428,8 @@
                     </div>
 
                     <div class="team-card">
-                        <img class="team-card__photo" src="assets/michael.jpg" alt="Michael Giacalone">
+                        <img class="team-card__photo team-card__photo--michael" src="assets/test_michael.jpg" alt="Michael Giacalone">
                         <h2 class="team-card__name">Michael Giacalone</h2>
-                        <p class="team-card__title">Global Real Estate Advisor &nbsp;·&nbsp; Premier Sotheby&apos;s International Realty</p>
                         <div class="team-card__bio">
                             <p>With more than 17 years of distinguished experience and over 350 successful transactions, Michael Giacalone is a trusted global real estate advisor with Premier Sotheby&apos;s International Realty Broad Avenue office in Naples. Originally from New Jersey, Michael has been consistently recognized among the industry&apos;s top performers, earning membership in the RE/MAX Hall of Fame and ranking among the Top 100 RE/MAX Agents in New Jersey.</p>
                             <p>Renowned for his straightforward, results-driven approach, Michael excels at structuring complex transactions, negotiating strategically, and delivering exceptional outcomes for his clients. Guided by his Northeast drive and disciplined work ethic, he brings a distinctive blend of determination, professionalism, and finesse to the Naples luxury real estate market, where discerning clientele value discretion, expertise, and white-glove service. His ability to combine tenacity with a refined, client-centered approach ensures an experience that is both highly personalized and results-oriented.</p>
@@ -397,6 +439,16 @@
                         </div>
                     </div>
 
+                </div>
+
+                <div class="about-after-bios">
+                    <p>We take pride in delivering exceptional results for every client we serve. Whether you&apos;re buying, selling, or simply exploring the market, we&apos;re committed to providing a seamless experience backed by local expertise and proven success.</p>
+                    <p>If you&apos;re considering selling your home, contact us for a confidential conversation to get an accurate look at your property&apos;s current market value.</p>
+                    <p>When you&apos;re ready to take the next step, contact us directly.</p>
+                    <p class="about-after-bios__phones">
+                        <a href="tel:+12398774450">Paul 239.877.4450</a><span class="about-after-bios__sep">, </span><a href="tel:+12395956500">Pete 239.595.6500</a><span class="about-after-bios__sep">, </span><a href="tel:+12394310321">Michael 239.431.0321</a>
+                    </p>
+                    <p>We&apos;re here to help you navigate the market with confidence and achieve exceptional results.</p>
                 </div>
             </div>
 
@@ -452,7 +504,7 @@
             <div class="row s-footer__main">
 
                 <div class="column lg-5 md-6 tab-12 s-footer__about">
-                    <h4>Arpin & Giacalone</h4>
+                    <h4>ARG Naples</h4>
 
                     <p>
                         Our proven performance and exceptional marketing expertise consistently deliver the
@@ -496,7 +548,7 @@
 
                 <div class="column lg-12 tab-12">
                     <div class="ss-copyright">
-                        <span>© Copyright Michael Giacalone & Team</span>
+                        <span>© Copyright ARG Naples</span>
                     </div>
                 </div>
 
@@ -521,4 +573,5 @@
     <script src="js/subscribe-footer.js"></script>
 
 </body>
+</html>
 </html>

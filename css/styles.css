@@ -77,12 +77,35 @@
 /* ------------------------------------------------------------------- 
  * ## fonts 
  * ------------------------------------------------------------------- */
-@import url("site-fonts.css");
+/* Segoe UI cannot be self-hosted as downloadable webfonts without a Microsoft license.
+ * These @font-face rules use local() only so Windows uses the installed family; other
+ * OSes fall through to system-ui / -apple-system in --font-body. */
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Segoe UI');
+}
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: local('Segoe UI Semibold'), local('Segoe UI');
+}
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('Segoe UI Bold'), local('Segoe UI');
+}
 
 :root {
-    --font-body : "Benton Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    --font-serif    : "Mercury Display", "Times New Roman", Times, serif;
-    --font-display  : "Premier Display", "Mercury Display", Georgia, serif;
+    --font-body : "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif    : "Segoe UI", system-ui, sans-serif;
+    --font-display  : "Segoe UI", system-ui, sans-serif;
     --font-1        : var(--font-body);
     --font-2        : var(--font-serif);
 
@@ -2988,7 +3011,7 @@ img.u-pull-left {
     z-index        : 1;
     display        : block;
     content        : "...";
-    font-family    : georgia, serif;
+    font-family    : var(--font-1);
     font-size      : 2.4rem;
     height         : 90px;
     width          : 90px;

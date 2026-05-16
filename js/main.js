@@ -469,18 +469,26 @@
     * ------------------------------------------------------ */ 
     const ssSwiper = function() {
 
-        const mySwiper = new Swiper('.swiper-container', {
+        document.querySelectorAll('.swiper-container').forEach(function (swiperEl) {
 
-            slidesPerView: 1,
-            effect: 'fade',
-            speed: 1000,
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true, 
-                renderBullet: function (index, className) {
-                    return '<span class="' + className + '">' + (index + 1) + '</span>';
-                }
+            const paginationEl = swiperEl.querySelector('.swiper-pagination');
+            const options = {
+                slidesPerView: 1,
+                effect: 'fade',
+                speed: 1000
+            };
+
+            if (paginationEl) {
+                options.pagination = {
+                    el: paginationEl,
+                    clickable: true,
+                    renderBullet: function (index, className) {
+                        return '<span class="' + className + '">' + (index + 1) + '</span>';
+                    }
+                };
             }
+
+            new Swiper(swiperEl, options);
 
         });
 

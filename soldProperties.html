@@ -4,7 +4,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Significant Sales (Test) — Arpin &amp; Giacalone</title>
+    <title>Significant Sales (Test) — ARG Naples</title>
 
     <script>
         document.documentElement.classList.remove('no-js');
@@ -23,7 +23,7 @@
 
     <style>
         /* ── Base ── */
-        body { background: #fff; font-family: var(--font-body, "Benton Sans", sans-serif); }
+        body { background: #fff; font-family: var(--font-body, "Segoe UI", sans-serif); }
 
         /* ── Header nav (desktop) ── */
         @media screen and (min-width: 1201px) {
@@ -47,8 +47,7 @@
             .s-header__nav-wrap .s-header__nav > li:last-child { border-bottom: none; }
             .s-header__nav-wrap .s-header__nav > li > a { color: #111 !important; font-size: 1.5rem; display: block; padding: 0.4rem 0 0.4rem 2.4rem; }
             .s-header__nav-wrap .s-header__nav .sub-menu li a { color: #333 !important; }
-            .s-header__nav-wrap .s-header__nav > li > a[href^="tel:"],
-            .s-header__nav-wrap .s-header__nav > li:last-child > a { font-size: 1.4rem; padding-top: 0.6rem; padding-bottom: 0.6rem; }
+            .s-header__nav-wrap .s-header__nav > li > a[href^="tel:"] { font-size: 1.4rem; padding-top: 0.6rem; padding-bottom: 0.6rem; }
         }
         /* ── Header logo ── */
         .s-header__branding .site-title img { max-height: 64px; width: auto; height: auto; display: block; object-fit: contain; }
@@ -79,15 +78,8 @@
             font-weight: 800;
             letter-spacing: -0.02em;
             line-height: 1.1;
-            margin: 0 0 1.4rem;
+            margin: 0;
             color: #111;
-        }
-        .sold-hero__subtitle {
-            font-size: 1.3rem;
-            line-height: 1.65;
-            max-width: 600px;
-            margin: 0 auto;
-            color: #555;
         }
         @media screen and (min-width: 769px) {
             .sold-hero { --page-hero-cap: clamp(8rem, 10vw, 10.5rem); }
@@ -95,7 +87,6 @@
 
         @media screen and (max-width: 768px) {
             .sold-hero { padding: calc(var(--page-hero-cap) + 0.65rem) 1.6rem 2rem; }
-            .sold-hero__subtitle { font-size: 1.1rem; }
             .sold-page { padding: 3.5rem 1.4rem 5rem; }
             .sold-section { margin-bottom: 4rem; }
             .s-header__branding .site-title img { max-height: 36px; }
@@ -103,7 +94,7 @@
 
         /* ── Page body ── */
         .sold-page {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 6rem 2rem 8rem;
         }
@@ -139,7 +130,7 @@
         .sold-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            gap: 4rem 3.5rem;
         }
         @media screen and (max-width: 768px) {
             .sold-grid { grid-template-columns: 1fr; gap: 2.8rem; }
@@ -266,8 +257,8 @@
         }
 
         .prop-card__desc {
-            font-size: 1.1rem;
-            line-height: 1.65;
+            font-size: 1.5rem;
+            line-height: 1.75;
             color: #555;
             flex: 1;
             margin-bottom: 1.8rem;
@@ -296,20 +287,21 @@
         }
 
         .test-sales-page .prop-card--deck .prop-card__img-wrap {
-            height: 240px;
+            height: clamp(300px, 36vw, 440px);
         }
 
         .test-sales-page .prop-card--deck .prop-card__body--deck {
-            padding: 1.35rem 1.25rem 1.5rem;
+            padding: 1.75rem 1.75rem 2rem;
             text-align: center;
         }
 
         .test-sales-page .prop-card--deck .prop-card__address {
-            margin: 0 0 0.85rem;
-            font-size: 1.12rem;
+            margin: 0 0 1rem;
+            font-size: 1.55rem;
             font-weight: 700;
             line-height: 1.35;
             letter-spacing: 0.01em;
+            color: #002348;
         }
 
         .test-sales-page .prop-card--deck .prop-card__meta-bar {
@@ -321,38 +313,25 @@
             padding-top: 0;
             margin: 0;
             border-top: none;
-            font-size: 0.92rem;
+            font-size: 1.35rem;
+            font-weight: 400;
             line-height: 1.45;
-            color: #333;
-        }
-
-        .test-sales-page .prop-card--deck .prop-card__meta-sep {
-            color: rgba(0, 35, 72, 0.28);
-            font-weight: 300;
-            font-size: 1.1rem;
-            user-select: none;
-        }
-
-        .test-sales-page .prop-card--deck .prop-card__meta-item--sold {
-            font-weight: 800;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            font-size: 0.72rem;
             color: #002348;
         }
 
-        .test-sales-page .prop-card--deck .prop-card__meta-item--price {
-            font-weight: 800;
-            font-size: 1.05rem;
-            color: #111;
-            letter-spacing: -0.02em;
+        .test-sales-page .prop-card--deck .prop-card__meta-sep {
+            color: rgba(0, 35, 72, 0.38);
+            font-weight: 300;
+            font-size: 1.35rem;
+            user-select: none;
         }
 
-        .test-sales-page .prop-card--deck .prop-card__meta-item--rep {
-            font-weight: 600;
-            font-size: 0.78rem;
-            letter-spacing: 0.05em;
-            color: #555;
+        .test-sales-page .prop-card--deck .prop-card__meta-item {
+            font-weight: 400;
+            font-size: 1.35rem;
+            line-height: 1.45;
+            color: #002348;
+            letter-spacing: 0;
             text-transform: none;
         }
 
@@ -394,7 +373,7 @@
 
             <div class="s-header__branding">
                 <p class="site-title">
-                    <a href="index.html"><img src="https://cdn-cws.datafloat.com/PSB/images/company/PSB/logo-white.png" alt="Arpin &amp; Giacalone"></a>
+                    <a href="index.html"><img src="https://cdn-cws.datafloat.com/PSB/images/company/PSB/logo-white.png" alt="ARG Naples"></a>
                 </p>
             </div>
 
@@ -405,25 +384,24 @@
                         <li class="has-children">
                             <a href="#0" title="">Featured Neighborhoods</a>
                             <ul class="sub-menu" style="color: white">
-                                <li><a href="communities/port.html">PORT ROYAL</a></li>
-                                <li><a href="communities/aqualane.html">AQUALANE SHORES</a></li>
-                                <li><a href="communities/olde.html">OLDE NAPLES</a></li>
-                                <li><a href="communities/moorings.html">THE MOORINGS</a></li>
-                                <li><a href="communities/park.html">PARK SHORE</a></li>
-                                <li><a href="communities/pelican.html">PELICAN BAY</a></li>
+                                <li><a href="communities/port.html">Port Royal</a></li>
+                                <li><a href="communities/aqualane.html">Aqualane Shores</a></li>
+                                <li><a href="communities/olde.html">Olde Naples</a></li>
+                                <li><a href="communities/moorings.html">The Moorings</a></li>
+                                <li><a href="communities/park.html">Park Shore</a></li>
+                                <li><a href="communities/pelican.html">Pelican Bay</a></li>
                             </ul>
                         </li>
-                        <li><a href="soldProperties.html" title="">Significant Sales</a></li>
+                        <li class="current-menu-item"><a href="soldProperties.html" title="">Significant Sales</a></li>
                         <li><a href="developments.html" title="">New Developments</a></li>
                         <li class="has-children">
                             <a href="#0" title="">Resources</a>
-                            <ul class="sub-menu">
+                            <ul class="sub-menu" style="color: white">
                                 <li><a href="blog.html">Insights</a></li>
                                 <li><a href="single-video.html">Request A Private Market Evaluation</a></li>
                             </ul>
                         </li>
-                        <li><a href="about.html" title="">About</a></li>
-                        <li><a href="tel:239-431-03212" title="">Call Us</a></li>
+                        <li><a href="about.html" title="">About Us</a></li>
                     </ul>
                 </nav>
             </div>
@@ -434,9 +412,8 @@
 
         <!-- hero -->
         <div class="sold-hero">
-            <p class="sold-hero__eyebrow">Arpin &amp; Giacalone</p>
+            <p class="sold-hero__eyebrow">ARG Naples</p>
             <h1 class="sold-hero__title">Significant Sales</h1>
-            <p class="sold-hero__subtitle">Twenty-four closings from <em>assets/Presentation1.pptx</em> — each photo is the image used on the corresponding slide in the deck.</p>
         </div>
 
         <!-- properties -->
@@ -828,7 +805,7 @@
 
             <div class="row s-footer__main">
                 <div class="column lg-5 md-6 tab-12 s-footer__about">
-                    <h4>Arpin &amp; Giacalone</h4>
+                    <h4>ARG Naples</h4>
                     <p>Our proven performance and exceptional marketing expertise consistently deliver the results our clients desire. This success is reflected in a distinguished record of completed transactions and delighted homeowners across the Naples luxury real estate community.</p>
                 </div>
                 <div class="column lg-5 md-6 tab-12">
@@ -851,7 +828,7 @@
             <div class="row s-footer__bottom">
                 <div class="column lg-12 tab-12">
                     <div class="ss-copyright">
-                        <span>&copy; Copyright Michael Giacalone &amp; Team</span>
+                        <span>&copy; Copyright ARG Naples</span>
                     </div>
                 </div>
             </div>

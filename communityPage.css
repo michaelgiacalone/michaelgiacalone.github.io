@@ -1,5 +1,5 @@
 /* ===================================================
-   communityPage.css — Arpin & Giacalone Community Pages
+   communityPage.css — ARG Naples Community Pages
    =================================================== */
 
 /* ---- Community Hero ---- */
@@ -144,9 +144,27 @@
 
 /* ---- Listings Section ---- */
 .community-listings {
-    width: 82%;
-    max-width: 1200px;
+    width: 96%;
+    max-width: 1680px;
     margin: 4rem auto 6rem;
+}
+
+/* IDX Listings Showcase (Vue / shadow DOM on community pages) */
+.community-listings idx-listings-showcase {
+    display: block;
+    width: 100%;
+}
+
+@media screen and (min-width: 900px) {
+    .community-listings idx-listings-showcase {
+        zoom: 1.1;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .community-listings idx-listings-showcase {
+        zoom: 1.14;
+    }
 }
 
 .community-listings__header {
@@ -407,7 +425,7 @@
     padding: 0.85rem 2.2rem;
     background: #002348;
     color: #fff;
-    font-family: var(--font-body, "Benton Sans", sans-serif);
+    font-family: var(--font-body, "Segoe UI", sans-serif);
     font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.14em;
@@ -482,7 +500,7 @@
 /* Wrapper */
 .IDX-main,
 #idxStart .IDX-main {
-    font-family: var(--font-body, "Benton Sans", sans-serif) !important;
+    font-family: var(--font-body, "Segoe UI", sans-serif) !important;
     color: #111 !important;
 }
 
@@ -509,11 +527,11 @@
     letter-spacing: 0.04em;
 }
 
-/* Grid of cards */
+/* Grid of cards (legacy IDX results embeds — not Listings Showcase widgets) */
 .IDX-resultsList {
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 2.4rem !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 2.8rem !important;
     list-style: none !important;
     padding: 0 !important;
     margin: 0 0 3rem !important;
@@ -546,7 +564,7 @@
 .IDX-resultsCell img,
 .IDX-listingPhoto img {
     width: 100% !important;
-    height: 240px !important;
+    height: 320px !important;
     object-fit: cover !important;
     display: block !important;
 }
@@ -561,7 +579,7 @@
 .IDX-listingPrice,
 .IDX-fieldValue[id*="price"],
 span[class*="price"] {
-    font-size: 1.35rem !important;
+    font-size: 1.5rem !important;
     font-weight: 800 !important;
     color: #002348 !important;
     display: block !important;
@@ -647,8 +665,8 @@ span[class*="address"] {
 
 .idx-custom-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.4rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.8rem;
     margin-top: 2rem;
 }
 
@@ -681,7 +699,7 @@ span[class*="address"] {
 .idx-custom-card__img {
     position: relative;
     width: 100%;
-    height: 240px;
+    height: 320px;
     overflow: hidden;
     background: #eee;
 }
