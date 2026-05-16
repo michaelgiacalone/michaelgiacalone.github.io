@@ -1,0 +1,10 @@
+# Static site: no build step. Functions live in netlify/functions/.
+[build]
+  publish = "."
+
+# Node 18+ provides global fetch for serverless functions.
+[build.environment]
+  NODE_VERSION = "20"
+
+[functions]
+  directory = "netlify/functions"
