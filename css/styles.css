@@ -2348,6 +2348,20 @@ button.btn--large {
     --btn-height : calc(var(--vspace-btn) + 1.6rem);
 }
 
+/* Navy CTA buttons for dialog and email subscription */
+.pme-modal__submit,
+.mc-form .btn--primary {
+    background: #002348 !important;
+    border-color: #002348 !important;
+    color: white !important;
+}
+
+.pme-modal__submit:hover,
+.mc-form .btn--primary:hover {
+    background: #001a35 !important;
+    border-color: #001a35 !important;
+}
+
 .btn--stroke,
 button.btn--stroke {
     background  : transparent !important;
