@@ -8,3 +8,13 @@
 
 [functions]
   directory = "netlify/functions"
+
+[[redirects]]
+  from = "/realestate.html"
+  to = "/search-properties.html"
+  status = 301
+
+[[redirects]]
+  from = "/blogPost.html"
+  to = "/Insights/insight-record-breaking-62m-naples-sale-paul-arpin-202608.html"
+  status = 301

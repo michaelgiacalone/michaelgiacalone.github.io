@@ -109,15 +109,28 @@
 
         toggleButton.addEventListener('click', function(e) {
             e.preventDefault();
+            var opening = !siteBody.classList.contains('menu-is-open');
             toggleButton.classList.toggle('is-clicked');
             siteBody.classList.toggle('menu-is-open');
 
-            scrollLock.getScrollState() ? scrollLock.disablePageScroll(mainNavWrap) : scrollLock.enablePageScroll(mainNavWrap);
+            if (opening) {
+                mainNavWrap.scrollTop = 0;
+                scrollLock.disablePageScroll(mainNavWrap);
+            } else {
+                scrollLock.enablePageScroll(mainNavWrap);
+            }
         });
 
         // open (or close) submenu items in mobile view menu. 
         // close all the other open submenu items.
         mainNav.addEventListener('click', function(e) {
+
+            // Let PME / other submenu links navigate (or open modal) normally
+            var subMenuLink = e.target.closest('.sub-menu a[href]');
+            if (subMenuLink) {
+                var subHref = (subMenuLink.getAttribute('href') || '').trim();
+                if (subHref && subHref !== '#0') return;
+            }
 
             //check if the right element clicked
             if (!e.target.closest('.has-children')) return;

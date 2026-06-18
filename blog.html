@@ -14,6 +14,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/vendor.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/site-footer.css">
     <link rel="stylesheet" href="realestate.css">
 
     <!-- Favicons -->
@@ -28,7 +29,9 @@
         /* ── Header nav (desktop) ── */
         @media screen and (min-width: 1201px) {
             .s-header__navigation .s-header__nav,
-            .s-header__navigation .s-header__nav-wrap { display: flex; flex-wrap: nowrap; white-space: nowrap; }
+            .s-header__navigation .s-header__nav-wrap { display: flex; flex-wrap: nowrap; }
+            .s-header__navigation .s-header__nav > li > a { white-space: nowrap; }
+            .s-header__navigation .s-header__nav ul.sub-menu li a { white-space: normal; line-height: 1.45; max-width: 20rem; }
             .s-header__navigation .s-header__nav a { color: #fff !important; font-size: 1.75rem; }
             .s-header__navigation .s-header__nav li { padding: 0 1.45rem; }
             .s-header__navigation .s-header__nav a:hover { color: rgba(255,255,255,0.85) !important; }
@@ -46,7 +49,13 @@
             .s-header__nav-wrap .s-header__nav > li { display: block !important; padding: 0.8rem 0; border-bottom: 1px solid rgba(0,0,0,0.08); }
             .s-header__nav-wrap .s-header__nav > li:last-child { border-bottom: none; }
             .s-header__nav-wrap .s-header__nav > li > a { color: #111 !important; font-size: 1.5rem; display: block; padding: 0.4rem 0 0.4rem 2.4rem; }
-            .s-header__nav-wrap .s-header__nav .sub-menu li a { color: #333 !important; }
+            .s-header__nav-wrap .s-header__nav .sub-menu li a {
+                color: #333 !important;
+                white-space: normal;
+                line-height: 1.5;
+                padding-right: 8vw;
+                overflow-wrap: break-word;
+            }
             .s-header__nav-wrap .s-header__nav > li > a[href^="tel:"] { font-size: 1.4rem; padding-top: 0.6rem; padding-bottom: 0.6rem; }
         }
         /* ── Header logo ── */
@@ -277,7 +286,7 @@
                             <a href="#0" title="">Resources</a>
                             <ul class="sub-menu" style="color: white">
                                 <li class="current-menu-item"><a href="blog.html">Insights</a></li>
-                                <li><a href="single-video.html">Request A Private Market Evaluation</a></li>
+                                <li><a href="#pme-request" class="js-pme-modal">Request A Private Market Evaluation</a></li>
                             </ul>
                         </li>
                         <li><a href="about.html" title="">About Us</a></li>
@@ -300,142 +309,102 @@
         <section id="content" class="s-content" style="background: #fff; padding: 0;">
             <div class="blog-section">
                 <div class="blog-grid">
-
-                    <!-- Featured post -->
                     <article class="blog-card blog-card--featured">
-                        <div class="blog-card__image-wrap">
-                            <a href="blogPost.html">
-                                <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&amp;fit=crop&amp;w=2000&amp;q=85" alt="Luxury waterfront estate — Naples, Florida">
-                            </a>
-                        </div>
-                        <div class="blog-card__body">
-                            <p class="blog-card__category">Market Update</p>
-                            <h2 class="blog-card__title">
-                                <a href="blogPost.html">Record-Breaking $62M Naples Sale — What It Means for Port Royal</a>
-                            </h2>
-                            <p class="blog-card__meta">
-                                <span>Michael Giacalone</span>
-                                <span>February 21, 2025</span>
-                            </p>
-                            <p class="blog-card__excerpt">
-                                A landmark transaction just closed on Port Royal's coveted waterfront, setting a new benchmark for Naples luxury real estate. Here's what buyers and sellers need to know about the ripple effect this sale will have on the broader market.
-                            </p>
-                            <a href="blogPost.html" class="blog-card__readmore">Read More</a>
-                        </div>
-                    </article>
-
-                    <!-- Post 2 -->
-                    <article class="blog-card">
-                        <div class="blog-card__image-wrap">
-                            <a href="blogPost.html">
-                                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&amp;fit=crop&amp;w=1200&amp;q=85" alt="Luxury home purchase — keys and new home">
-                            </a>
-                        </div>
-                        <div class="blog-card__body">
-                            <p class="blog-card__category">Buyer's Guide</p>
-                            <h2 class="blog-card__title">
-                                <a href="blogPost.html">5 Things Every Naples Luxury Buyer Should Know Before Making an Offer</a>
-                            </h2>
-                            <p class="blog-card__meta">
-                                <span>Michael Giacalone</span>
-                                <span>January 14, 2025</span>
-                            </p>
-                            <p class="blog-card__excerpt">
-                                The Naples luxury market moves fast and rewards preparation. From understanding private listings to navigating multiple-offer scenarios, here are the insider strategies our team shares with every buyer we work with.
-                            </p>
-                            <a href="blogPost.html" class="blog-card__readmore">Read More</a>
-                        </div>
-                    </article>
-
-                    <!-- Post 3 -->
-                    <article class="blog-card">
-                        <div class="blog-card__image-wrap">
-                            <a href="blogPost.html">
-                                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&amp;fit=crop&amp;w=1200&amp;q=85" alt="Waterfront luxury home with pool">
-                            </a>
-                        </div>
+                        <div class="blog-card__image-wrap"><a href="Insights/insight-port-royal-club-fresh-start-icon-202609.html"><img src="https://www.portroyalclub.org/Images/Library/PRC_Renderings_updated_Page_03.jpg" alt="Port Royal Club, A Fresh Start for an Icon"></a></div>
                         <div class="blog-card__body">
                             <p class="blog-card__category">Neighborhood Spotlight</p>
-                            <h2 class="blog-card__title">
-                                <a href="blogPost.html">Aqualane Shores vs. Port Royal: Which Waterfront Community Is Right for You?</a>
-                            </h2>
-                            <p class="blog-card__meta">
-                                <span>Michael Giacalone</span>
-                                <span>December 5, 2024</span>
-                            </p>
-                            <p class="blog-card__excerpt">
-                                Both communities offer deep-water dockage and sweeping bay views, but their personalities couldn't be more distinct. We break down the lifestyle, price points, and hidden advantages of each to help you decide.
-                            </p>
-                            <a href="blogPost.html" class="blog-card__readmore">Read More</a>
+                            <h2 class="blog-card__title"><a href="Insights/insight-port-royal-club-fresh-start-icon-202609.html">Port Royal Club, A Fresh Start for an Icon</a></h2>
+                            <p class="blog-card__meta"><span>Michael Giacalone</span><span>September 12, 2026</span></p>
+                            <p class="blog-card__excerpt">The Port Royal Club here in Naples is entering a completely new chapter</p>
+                            <a href="Insights/insight-port-royal-club-fresh-start-icon-202609.html" class="blog-card__readmore">Read More</a>
                         </div>
                     </article>
 
-                    <!-- Post 4 -->
                     <article class="blog-card">
-                        <div class="blog-card__image-wrap">
-                            <a href="blogPost.html">
-                                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&amp;fit=crop&amp;w=1200&amp;q=85" alt="Luxury home exterior — Naples seller market">
-                            </a>
-                        </div>
+                        <div class="blog-card__image-wrap"><a href="Insights/insight-record-breaking-62m-naples-sale-paul-arpin-202608.html"><img src="assets/insight_8_image_headline.jpg" alt="Record-breaking sale in Naples Florida"></a></div>
                         <div class="blog-card__body">
-                            <p class="blog-card__category">Seller's Guide</p>
-                            <h2 class="blog-card__title">
-                                <a href="blogPost.html">Is Now the Right Time to Sell Your Naples Home?</a>
-                            </h2>
-                            <p class="blog-card__meta">
-                                <span>Michael Giacalone</span>
-                                <span>November 18, 2024</span>
-                            </p>
-                            <p class="blog-card__excerpt">
-                                Inventory remains historically tight while demand from out-of-state buyers continues to climb. We look at the key indicators that signal when Naples luxury sellers are most likely to achieve top-dollar results.
-                            </p>
-                            <a href="blogPost.html" class="blog-card__readmore">Read More</a>
+                            <p class="blog-card__category">Market Update</p>
+                            <h2 class="blog-card__title"><a href="Insights/insight-record-breaking-62m-naples-sale-paul-arpin-202608.html">Record-Breaking $62M Naples Sale by Paul Arpin</a></h2>
+                            <p class="blog-card__meta"><span>Michael Giacalone</span><span>August 8, 2026</span></p>
+                            <p class="blog-card__excerpt">Learn how luxury homeowners in Naples can sell for top dollar.</p>
+                            <a href="Insights/insight-record-breaking-62m-naples-sale-paul-arpin-202608.html" class="blog-card__readmore">Read More</a>
                         </div>
                     </article>
 
-                    <!-- Post 5 -->
                     <article class="blog-card">
-                        <div class="blog-card__image-wrap">
-                            <a href="blogPost.html">
-                                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&amp;fit=crop&amp;w=1200&amp;q=85" alt="Market analytics and luxury real estate reporting">
-                            </a>
-                        </div>
+                        <div class="blog-card__image-wrap"><a href="Insights/insight-preparing-a-luxury-home-for-sale-in-today-s-naples-market-202606.html"><img src="assets/insight_7_image_headline.jpeg" alt="How to Prepare a Luxury Home for Sale in Naples Florida"></a></div>
                         <div class="blog-card__body">
-                            <p class="blog-card__category">Market Report</p>
-                            <h2 class="blog-card__title">
-                                <a href="blogPost.html">Q4 2024 Naples Luxury Market Report: A Year of Record Transactions</a>
-                            </h2>
-                            <p class="blog-card__meta">
-                                <span>Michael Giacalone</span>
-                                <span>October 29, 2024</span>
-                            </p>
-                            <p class="blog-card__excerpt">
-                                From Pelican Bay to Olde Naples, 2024 was a defining year for high-end real estate in our market. Our team's comprehensive annual overview covers price trends, days-on-market data, and what to expect heading into 2025.
-                            </p>
-                            <a href="blogPost.html" class="blog-card__readmore">Read More</a>
+                            <p class="blog-card__category">Seller&#x27;s Guide</p>
+                            <h2 class="blog-card__title"><a href="Insights/insight-preparing-a-luxury-home-for-sale-in-today-s-naples-market-202606.html">Preparing a Luxury Home for Sale in Today’s Naples Market</a></h2>
+                            <p class="blog-card__meta"><span>Michael Giacalone</span><span>June 11, 2026</span></p>
+                            <p class="blog-card__excerpt">Learn how luxury homeowners in Naples can maximize value with staging, marketing, curb appeal, and strategic property preparation.</p>
+                            <a href="Insights/insight-preparing-a-luxury-home-for-sale-in-today-s-naples-market-202606.html" class="blog-card__readmore">Read More</a>
                         </div>
                     </article>
 
-                    <!-- Post 6 -->
                     <article class="blog-card">
-                        <div class="blog-card__image-wrap">
-                            <a href="blogPost.html">
-                                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&amp;fit=crop&amp;w=1200&amp;q=85" alt="Southwest Florida beach and Gulf Coast lifestyle">
-                            </a>
+                        <div class="blog-card__image-wrap"><a href="Insights/insight-port-royal-exclusive-neighborhood-202506.html"><img src="assets/insight_6_image_headline.jpeg" alt="Inside Port Royal: Naples’ Most Exclusive Waterfront Community"></a></div>
+                        <div class="blog-card__body">
+                            <p class="blog-card__category">Neighborhood Spotlight</p>
+                            <h2 class="blog-card__title"><a href="Insights/insight-port-royal-exclusive-neighborhood-202506.html">What Makes Port Royal One of America’s Most Exclusive Neighborhoods?</a></h2>
+                            <p class="blog-card__meta"><span>Michael Giacalone</span><span>June 4, 2025</span></p>
+                            <p class="blog-card__excerpt">Discover why Port Royal is considered one of America’s most prestigious luxury waterfront neighborhoods and what makes it unique.</p>
+                            <a href="Insights/insight-port-royal-exclusive-neighborhood-202506.html" class="blog-card__readmore">Read More</a>
                         </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <div class="blog-card__image-wrap"><a href="Insights/insight-fifth-avenue-third-street-naples-202505.html"><img src="assets/insight_5_image_headline.jpeg" alt="Best Dining, Shopping, and Lifestyle in Downtown Naples"></a></div>
                         <div class="blog-card__body">
                             <p class="blog-card__category">Lifestyle</p>
-                            <h2 class="blog-card__title">
-                                <a href="blogPost.html">Living in Naples: Why the World's Most Discerning Buyers Choose Southwest Florida</a>
-                            </h2>
-                            <p class="blog-card__meta">
-                                <span>Michael Giacalone</span>
-                                <span>September 10, 2024</span>
-                            </p>
-                            <p class="blog-card__excerpt">
-                                Beyond the beaches and world-class golf, Naples offers something rarer: a luxury lifestyle that balances privacy, natural beauty, and a genuinely welcoming community. Here's what keeps our clients coming back.
-                            </p>
-                            <a href="blogPost.html" class="blog-card__readmore">Read More</a>
+                            <h2 class="blog-card__title"><a href="Insights/insight-fifth-avenue-third-street-naples-202505.html">A Local’s Guide to Fifth Avenue South and Third Street South</a></h2>
+                            <p class="blog-card__meta"><span>Michael Giacalone</span><span>May 7, 2025</span></p>
+                            <p class="blog-card__excerpt">Explore Fifth Avenue South and Third Street South, the heart of downtown Naples known for luxury shopping, fine dining, and coastal charm.</p>
+                            <a href="Insights/insight-fifth-avenue-third-street-naples-202505.html" class="blog-card__readmore">Read More</a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <div class="blog-card__image-wrap"><a href="Insights/insight-architectural-styles-naples-luxury-homes-202504.html"><img src="assets/insight_4_image_headline.jpeg" alt="Luxury Home Architecture Styles in Naples Florida"></a></div>
+                        <div class="blog-card__body">
+                            <p class="blog-card__category">Lifestyle</p>
+                            <h2 class="blog-card__title"><a href="Insights/insight-architectural-styles-naples-luxury-homes-202504.html">The Architectural Styles Defining Naples Luxury Homes</a></h2>
+                            <p class="blog-card__meta"><span>Michael Giacalone</span><span>April 9, 2025</span></p>
+                            <p class="blog-card__excerpt">Explore the most popular luxury home architecture styles shaping Naples real estate, from West Indies-inspired estates to modern coastal design.</p>
+                            <a href="Insights/insight-architectural-styles-naples-luxury-homes-202504.html" class="blog-card__readmore">Read More</a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <div class="blog-card__image-wrap"><a href="Insights/insight-waterfront-living-naples-buyers-guide-202503.html"><img src="assets/insight_3_image_headline.jpeg" alt="A Buyer’s Guide to Waterfront Homes in Naples Florida"></a></div>
+                        <div class="blog-card__body">
+                            <p class="blog-card__category">Buyer&#x27;s Guide</p>
+                            <h2 class="blog-card__title"><a href="Insights/insight-waterfront-living-naples-buyers-guide-202503.html">Waterfront Living in Naples: What Buyers Should Know Before Purchasing</a></h2>
+                            <p class="blog-card__meta"><span>Michael Giacalone</span><span>March 12, 2025</span></p>
+                            <p class="blog-card__excerpt">Learn what luxury buyers should know before purchasing waterfront property in Naples, including boating access, dockage, exposure, and construction considerations.</p>
+                            <a href="Insights/insight-waterfront-living-naples-buyers-guide-202503.html" class="blog-card__readmore">Read More</a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <div class="blog-card__image-wrap"><a href="Insights/insight-why-naples-attracts-luxury-buyers-202502.html"><img src="assets/insight_2_image_headline.jpeg" alt="Why Luxury Buyers Are Moving to Naples Florida"></a></div>
+                        <div class="blog-card__body">
+                            <p class="blog-card__category">Lifestyle</p>
+                            <h2 class="blog-card__title"><a href="Insights/insight-why-naples-attracts-luxury-buyers-202502.html">Why Naples Continues to Attract Luxury Buyers From Around the World</a></h2>
+                            <p class="blog-card__meta"><span>Michael Giacalone</span><span>February 14, 2025</span></p>
+                            <p class="blog-card__excerpt">Discover why Naples continues attracting luxury homebuyers seeking waterfront living, tax advantages, golf, boating, and a world-class coastal lifestyle.</p>
+                            <a href="Insights/insight-why-naples-attracts-luxury-buyers-202502.html" class="blog-card__readmore">Read More</a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <div class="blog-card__image-wrap"><a href="Insights/insight-evolution-port-royal-naples-202501.html"><img src="assets/insight_1_image_headline.jpg" alt="The History and Evolution of Port Royal Naples Real Estate"></a></div>
+                        <div class="blog-card__body">
+                            <p class="blog-card__category">Neighborhood Spotlight</p>
+                            <h2 class="blog-card__title"><a href="Insights/insight-evolution-port-royal-naples-202501.html">The Evolution of Port Royal: From Coastal Hideaway to Global Luxury Destination</a></h2>
+                            <p class="blog-card__meta"><span>Michael Giacalone</span><span>January 18, 2025</span></p>
+                            <p class="blog-card__excerpt">Explore how Port Royal transformed into one of Naples’ most prestigious waterfront communities and why luxury buyers continue investing in this iconic neighborhood.</p>
+                            <a href="Insights/insight-evolution-port-royal-naples-202501.html" class="blog-card__readmore">Read More</a>
                         </div>
                     </article>
 
@@ -501,75 +470,11 @@
 
     </div> <!-- end page -->
 
-    <!-- Private Market Evaluation Modal -->
-    <div id="pmeModal" class="pme-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pmeModalTitle">
-        <div class="pme-modal__backdrop"></div>
-        <div class="pme-modal__box">
-            <button class="pme-modal__close" aria-label="Close">&times;</button>
-            <p class="pme-modal__eyebrow">Exclusive Service</p>
-            <h2 class="pme-modal__title" id="pmeModalTitle">The Luxury Market Is Always Changing</h2>
-            <div class="pme-modal__bar"></div>
-            <p class="pme-modal__body">Do you want a professional private market valuation from Naples' most trusted luxury real estate team? Share your details below and we'll be in touch.</p>
-            <form class="pme-modal__form" id="pmeForm">
-                <input type="text" name="name" placeholder="Full Name" required>
-                <input type="email" name="email" placeholder="Email Address" required>
-                <input type="tel" name="phone" placeholder="Phone Number">
-                <input type="text" name="address" placeholder="Property Address (optional)">
-                <button type="submit" class="pme-modal__submit">Request My Private Market Evaluation</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- JavaScript -->
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/site-footer.js"></script>
     <script src="js/subscribe-footer.js"></script>
-
-    <script>
-        // Private Market Evaluation Modal
-        (function () {
-            var modal = document.getElementById('pmeModal');
-            var form  = document.getElementById('pmeForm');
-            function openModal() { modal.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
-            function closeModal() { modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
-            document.querySelectorAll('a[href*="single-video"]').forEach(function (el) {
-                el.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
-            });
-            modal.querySelector('.pme-modal__backdrop').addEventListener('click', closeModal);
-            modal.querySelector('.pme-modal__close').addEventListener('click', closeModal);
-            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-                var btn     = form.querySelector('.pme-modal__submit');
-                var name    = form.querySelector('[name="name"]').value;
-                var email   = form.querySelector('[name="email"]').value;
-                var phone   = form.querySelector('[name="phone"]').value;
-                var address = form.querySelector('[name="address"]').value;
-                btn.disabled = true;
-                btn.textContent = 'Sending…';
-                fetch('/.netlify/functions/pme', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: name, email: email, phone: phone, address: address })
-                })
-                .then(function (r) { return r.json(); })
-                .then(function (res) {
-                    if (res.success) {
-                        form.innerHTML = '<p class="pme-modal__thanks">Thank you! We\'ll be in touch shortly.</p>';
-                    } else {
-                        btn.disabled = false;
-                        btn.textContent = 'Request My Private Market Evaluation';
-                        alert('Something went wrong. Please try again.');
-                    }
-                })
-                .catch(function () {
-                    btn.disabled = false;
-                    btn.textContent = 'Request My Private Market Evaluation';
-                    alert('Something went wrong. Please try again.');
-                });
-            });
-        })();
-    </script>
+    <script src="js/pme-modal.js"></script>
 
 </body>
 </html>

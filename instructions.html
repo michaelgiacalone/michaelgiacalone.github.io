@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ARG Naples — Insights Publishing Instructions</title>
+    <style>
+        :root {
+            --navy: #002348;
+            --ink: #111;
+            --muted: #666;
+            --border: rgba(0, 35, 72, 0.14);
+            --bg: #f4f6f8;
+            --card: #fff;
+            --accent: #003a7a;
+            --ok: #1b6b3a;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.65;
+        }
+        .wrap { max-width: 820px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+        .banner {
+            background: var(--navy);
+            color: #fff;
+            padding: 2rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.75rem;
+        }
+        .banner h1 { margin: 0 0 0.5rem; font-size: 1.75rem; }
+        .banner p { margin: 0; color: rgba(255,255,255,0.9); font-size: 1rem; }
+        .banner a { color: #fff; font-weight: 700; }
+        .toc {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.75rem;
+        }
+        .toc h2 { margin: 0 0 0.75rem; font-size: 1rem; color: var(--navy); }
+        .toc ol { margin: 0; padding-left: 1.25rem; }
+        .toc li { margin: 0.35rem 0; }
+        .toc a { color: var(--accent); }
+        section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+        }
+        section h2 {
+            background: #e8edf2;
+            margin: 0;
+            padding: 0.9rem 1.2rem;
+            font-size: 1rem;
+            color: var(--navy);
+            letter-spacing: 0.04em;
+        }
+        .section-body { padding: 1.25rem 1.35rem; }
+        .section-body > *:first-child { margin-top: 0; }
+        .section-body > *:last-child { margin-bottom: 0; }
+        h3 { font-size: 1.05rem; color: var(--navy); margin: 1.5rem 0 0.6rem; }
+        h3:first-child { margin-top: 0; }
+        p { margin: 0 0 1rem; }
+        ul, ol { margin: 0 0 1rem; padding-left: 1.35rem; }
+        li { margin: 0.4rem 0; }
+        code {
+            background: #eef2f6;
+            padding: 0.12em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #1a2332;
+            color: #e8edf2;
+            padding: 1rem 1.15rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            margin: 0 0 1rem;
+        }
+        pre code { background: none; padding: 0; color: inherit; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            margin: 0 0 1rem;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.65rem 0.75rem;
+            text-align: left;
+            vertical-align: top;
+        }
+        th { background: #e8edf2; color: var(--navy); font-weight: 700; }
+        .note {
+            background: #f0f6ff;
+            border-left: 4px solid var(--accent);
+            padding: 0.85rem 1rem;
+            margin: 1rem 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.95rem;
+        }
+        .warn {
+            background: #fff8ee;
+            border-left: 4px solid #c47a00;
+            padding: 0.85rem 1rem;
+            margin: 1rem 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.95rem;
+        }
+        .steps-num {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .steps-num li {
+            counter-increment: step;
+            position: relative;
+            padding-left: 2.5rem;
+            margin: 1rem 0;
+        }
+        .steps-num li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0.1rem;
+            width: 1.75rem;
+            height: 1.75rem;
+            background: var(--navy);
+            color: #fff;
+            border-radius: 50%;
+            font-weight: 800;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-link {
+            display: inline-block;
+            background: var(--navy);
+            color: #fff;
+            text-decoration: none;
+            padding: 0.65rem 1.25rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+        .btn-link:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+
+    <header class="banner">
+        <h1>Insights Publishing Instructions</h1>
+        <p>How to write an Insights article, use the <a href="insightsCreator.html">Insights Creator</a>, and publish it to the ARG Naples website. <strong>Run on a private computer only</strong> (<code>python3 -m http.server</code>) — these tools are not deployed to the public site.</p>
+    </header>
+
+    <nav class="toc" aria-label="Contents">
+        <h2>On this page</h2>
+        <ol>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#open-tool">Open the Insights Creator</a></li>
+            <li><a href="#write-article">Write your article</a></li>
+            <li><a href="#formatting">Formatting reference</a></li>
+            <li><a href="#photos">Add photos</a></li>
+            <li><a href="#review">Review and download</a></li>
+            <li><a href="#publish">Publish to the live site</a></li>
+            <li><a href="#github-desktop">Using GitHub Desktop</a></li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+        </ol>
+    </nav>
+
+    <section id="overview">
+        <h2>Overview</h2>
+        <div class="section-body">
+            <p>Publishing a new Insights article takes three main steps:</p>
+            <ol>
+                <li><strong>Create</strong> — write the article in the <a href="insightsCreator.html">Insights Creator</a> tool.</li>
+                <li><strong>Download</strong> — get a ZIP package with the article page, images, and a listing snippet.</li>
+                <li><strong>Publish</strong> — add the files to the website project, paste the snippet into <code>blog.html</code>, and push to Git so Netlify updates the live site.</li>
+            </ol>
+            <p>You do not need to write HTML by hand. The tool builds the article page for you using the same layout as existing Insights posts.</p>
+        </div>
+    </section>
+
+    <section id="open-tool">
+        <h2>Open the Insights Creator</h2>
+        <div class="section-body">
+            <p>The creator runs locally on your computer — it is not on the public website.</p>
+            <ol>
+                <li>Open <strong>Terminal</strong> (Mac) or your command line.</li>
+                <li>Go to the website project folder. For example:
+                    <pre><code>cd /path/to/giacalone</code></pre>
+                </li>
+                <li>Start a local server:
+                    <pre><code>python3 -m http.server</code></pre>
+                </li>
+                <li>In your browser, open:
+                    <pre><code>http://localhost:8000/insightsCreator.html</code></pre>
+                </li>
+            </ol>
+            <a class="btn-link" href="insightsCreator.html">Open Insights Creator</a>
+            <p class="note" style="margin-top:1.25rem;">Keep Terminal running while you work. When you are done, you can stop the server with <code>Ctrl + C</code>.</p>
+        </div>
+    </section>
+
+    <section id="write-article">
+        <h2>Write your article</h2>
+        <div class="section-body">
+            <h3>Step 1 — Article text</h3>
+            <p>Either <strong>drop a Word file</strong> (<code>.docx</code>) into the upload area, or <strong>paste / type</strong> your article in the text box.</p>
+            <ul>
+                <li><strong>First line</strong> = headline (filled in automatically in Step 3).</li>
+                <li><strong>Second line</strong> (optional) = subheadline — a short line under the headline.</li>
+                <li>Separate paragraphs with a <strong>blank line</strong>.</li>
+                <li>Use <code>## Heading</code> for section headings and <code>### Subheading</code> for smaller headings.</li>
+                <li>Use <code>&gt; Quote text</code> on its own line for a pull quote (blockquote).</li>
+            </ul>
+
+            <h3>Example article structure</h3>
+            <pre><code>Record-Breaking Sale in Port Royal
+What this means for Naples luxury buyers
+
+headlineImage="port-royal-sunset.jpg"
+
+When a single transaction resets the ceiling for an entire market, the reverberations are felt far beyond the closing table.
+
+## Why This Sale Matters
+
+Port Royal has long been the most prestigious address in Southwest Florida.
+
+inlineImage="market-chart.png"
+
+addCta title="Request A Private Market Evaluation"</code></pre>
+
+            <h3>Step 2 — Photos (optional)</h3>
+            <p>Drop JPG, PNG, or WEBP files into the photo area. <strong>Keep the original file names</strong> — you will reference them in your article text.</p>
+
+            <h3>Step 3 — Review</h3>
+            <p>The tool auto-fills headline, subheadline, date, read time, category (guessed from your text), excerpt, and file name. Author is remembered from your last session. Edit anything that needs changing, then click <strong>Refresh preview</strong>.</p>
+            <p class="note">Your author choice is remembered for the next article.</p>
+        </div>
+    </section>
+
+    <section id="formatting">
+        <h2>Formatting reference</h2>
+        <div class="section-body">
+            <p>These special lines go <strong>on their own line</strong> in your article text (except inline links, which go inside a sentence). Put a <strong>blank line before and after</strong> images and CTAs so they appear in the right place.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>What you type</th>
+                        <th>What it does</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>subheadline="Your subtitle"</code></td>
+                        <td>Subheadline under the main headline (optional if you use the second line of your article instead).</td>
+                    </tr>
+                    <tr>
+                        <td><code>headlineImage="photo.jpg"</code></td>
+                        <td>Wide banner image under the title — same style as existing Insights posts.</td>
+                    </tr>
+                    <tr>
+                        <td><code>inlineImage="photo.jpg"</code></td>
+                        <td>Smaller centered image inside the article body.</td>
+                    </tr>
+                    <tr>
+                        <td><code>headlineImage="https://…"</code></td>
+                        <td>Use a web image URL directly (no upload needed).</td>
+                    </tr>
+                    <tr>
+                        <td><code>[link text](page.html)</code></td>
+                        <td>Inline hyperlink inside a paragraph. Example: <code>[Port Royal](communities/port.html)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>hyperlink label="…" url="…"</code></td>
+                        <td>Standalone link on its own line. Use <code>url="#pme-request"</code> to open the private market evaluation form.</td>
+                    </tr>
+                    <tr>
+                        <td><code>addCta title="…"</code></td>
+                        <td>Centered navy button with your title as the label. Clicking opens the <strong>Request A Private Market Evaluation</strong> modal (same as the main site). You only need the title.</td>
+                    </tr>
+                    <tr>
+                        <td><code>## Section title</code></td>
+                        <td>Section heading (H2).</td>
+                    </tr>
+                    <tr>
+                        <td><code>### Subsection title</code></td>
+                        <td>Smaller heading (H3).</td>
+                    </tr>
+                    <tr>
+                        <td><code>&gt; Pull quote</code></td>
+                        <td>Highlighted blockquote.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Image file names</h3>
+            <ul>
+                <li>Local images must match a file you dropped in Step 2 (saved to the <code>assets/</code> folder).</li>
+                <li>If an image file is missing on the live site, <strong>nothing is shown</strong> — no broken image icon.</li>
+                <li>The headline image also appears on the Insights listing card in <code>blog.html</code>.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="photos">
+        <h2>Add photos</h2>
+        <div class="section-body">
+            <ol>
+                <li>Drop images into <strong>Step 2</strong> before downloading the ZIP.</li>
+                <li>Use the <strong>exact file name</strong> in <code>headlineImage=</code> or <code>inlineImage=</code>.</li>
+                <li>Wide landscape photos work best for <code>headlineImage</code>.</li>
+            </ol>
+            <p class="note"><strong>Preview tip:</strong> Drop images in Step 2 for the ZIP package. If the file is already in the project <code>assets/</code> folder on your machine, preview can show it too — use the <strong>exact file name</strong> in <code>headlineImage="…"</code> (straight quotes, on its own line).</p>
+        </div>
+    </section>
+
+    <section id="review">
+        <h2>Review and download</h2>
+        <div class="section-body">
+            <ol class="steps-num">
+                <li>Check headline, subheadline, author, date, category, and the short blurb in Step 3.</li>
+                <li>Click <strong>Refresh preview</strong> and scroll through the article. Test any <code>addCta</code> buttons — they should open the private market evaluation modal.</li>
+                <li>Click <strong>Download ZIP package</strong>. You get a file named like <code>insight-your-headline-202606-package.zip</code>.</li>
+                <li>Optionally click <strong>Copy listing snippet</strong> — you will need this for <code>blog.html</code>.</li>
+            </ol>
+            <p>The ZIP contains:</p>
+            <ul>
+                <li><code>Insights/your-article.html</code> — the full article page</li>
+                <li><code>assets/</code> — your uploaded photos (shared site folder)</li>
+                <li><code>-LISTING-SNIPPET.txt</code> — card HTML for <code>blog.html</code> (links to <code>Insights/…</code>)</li>
+            </ul>
+            <p class="note"><strong>Folder layout:</strong> <code>blog.html</code> = Insights listing (stays at site root). Each new post = one file inside <code>Insights/</code>.</p>
+        </div>
+    </section>
+
+    <section id="publish">
+        <h2>Publish to the live site</h2>
+        <div class="section-body">
+            <ol class="steps-num">
+                <li><strong>Unzip</strong> the package into the website project folder — the same folder that contains <code>blog.html</code> and <code>index.html</code>. Merge the <code>assets/</code> folder if one already exists.</li>
+                <li><strong>Add the listing</strong> — open <code>blog.html</code> in a text editor. Find <code>&lt;div class="blog-grid"&gt;</code> and paste the listing snippet at the <strong>top</strong> (it uses the featured card layout for the newest post).</li>
+                <li><strong>Commit and push</strong> so Netlify can deploy the update.</li>
+            </ol>
+
+            <h3>Using Terminal (Git)</h3>
+            <p>From the project folder:</p>
+            <pre><code>git add .
+git commit -m "Add Insights: Your headline here"
+git push</code></pre>
+            <p>The live site usually updates within a few minutes after the push completes.</p>
+
+            <div class="note">
+                <strong>What gets published:</strong> the new <code>.html</code> article file, any new images in <code>assets/</code>, and the updated <code>blog.html</code> listing.
+            </div>
+        </div>
+    </section>
+
+    <section id="github-desktop">
+        <h2>Using GitHub Desktop</h2>
+        <div class="section-body">
+            <p>If you prefer not to use Terminal for Git:</p>
+            <ol>
+                <li>Unzip the package into the project folder.</li>
+                <li>Paste the listing snippet into <code>blog.html</code>.</li>
+                <li>Open <strong>GitHub Desktop</strong> — you should see the new and changed files listed.</li>
+                <li>Write a summary such as <code>Add Insights: Your headline here</code>.</li>
+                <li>Click <strong>Commit to main</strong> (or your branch), then <strong>Push origin</strong>.</li>
+            </ol>
+        </div>
+    </section>
+
+    <section id="troubleshooting">
+        <h2>Troubleshooting</h2>
+        <div class="section-body">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Problem</th>
+                        <th>What to do</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Word file won’t load</td>
+                        <td>Save as <code>.docx</code> or copy/paste the text into Step 1 instead.</td>
+                    </tr>
+                    <tr>
+                        <td>No images in preview</td>
+                        <td>Drop the images in Step 2 first, then click Refresh preview.</td>
+                    </tr>
+                    <tr>
+                        <td>CTA button doesn’t appear</td>
+                        <td>Put <code>addCta title="…"</code> on its own line. Click Refresh preview.</td>
+                    </tr>
+                    <tr>
+                        <td>Article page works but not on Insights list</td>
+                        <td>Paste the listing snippet into <code>blog.html</code> inside <code>blog-grid</code>.</td>
+                    </tr>
+                    <tr>
+                        <td>Broken image on live site</td>
+                        <td>Check the file name matches exactly and the image was included when you unzipped into <code>assets/</code>.</td>
+                    </tr>
+                    <tr>
+                        <td>Changes not on live site yet</td>
+                        <td>Confirm <code>git push</code> finished. Netlify may take a few minutes to deploy.</td>
+                    </tr>
+                    <tr>
+                        <td>Creator page won’t open</td>
+                        <td>Make sure <code>python3 -m http.server</code> is running and you use <code>localhost:8000</code>.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <p style="text-align:center;color:var(--muted);font-size:0.9rem;margin-top:2rem;">
+        <a href="insightsCreator.html">← Back to Insights Creator</a>
+    </p>
+
+</div>
+
+</body>
+</html>

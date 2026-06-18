@@ -10,7 +10,14 @@ body {
     .s-header__navigation .s-header__nav-wrap {
         display: flex;
         flex-wrap: nowrap;
+    }
+    .s-header__navigation .s-header__nav > li > a {
         white-space: nowrap;
+    }
+    .s-header__navigation .s-header__nav ul.sub-menu li a {
+        white-space: normal;
+        line-height: 1.45;
+        max-width: 20rem;
     }
     .s-header__navigation .s-header__nav a {
         color: #fff !important;
@@ -61,6 +68,10 @@ body {
     }
     .s-header__nav-wrap .s-header__nav .sub-menu li a {
         color: #333 !important;
+        white-space: normal;
+        line-height: 1.5;
+        padding-right: 8vw;
+        overflow-wrap: break-word;
     }
     .s-header__nav-wrap .s-header__nav > li > a[href^="tel:"],
     .s-header__nav-wrap .s-header__nav > li:last-child > a {

@@ -3449,14 +3449,15 @@ img.u-pull-left {
 }
 
 .s-header__nav ul li a {
-    display     : block;
-    white-space : nowrap;
-    padding     : .6rem 3rem .6rem 2rem;
-    font-family : var(--font-1);
-    font-weight : 300;
-    font-size   : 1.45rem;
-    line-height : 1.8rem;
-    color       : rgba(255, 255, 255, 0.8);
+    display      : block;
+    white-space  : normal;
+    padding      : .6rem 3rem .6rem 2rem;
+    font-family  : var(--font-1);
+    font-weight  : 300;
+    font-size    : 1.45rem;
+    line-height  : 1.45;
+    color        : rgba(255, 255, 255, 0.8);
+    max-width    : 20rem;
 }
 
 .s-header__nav ul li a:focus,
@@ -3733,6 +3734,19 @@ body.search-is-visible .s-header__search-inner {
     .s-header__nav li ul {
         display : block !important;
     }
+
+    /* Resources submenu (PME link) — align right so long label stays in viewport */
+    .s-header__nav ul.sub-menu:has(a.js-pme-modal) {
+        left  : auto;
+        right : 0;
+    }
+
+    .s-header,
+    .s-header__navigation,
+    .s-header__nav-wrap,
+    .s-header__nav {
+        overflow : visible;
+    }
 }
 
 @media screen and (max-width: 1200px) {
@@ -3837,11 +3851,13 @@ body.search-is-visible .s-header__search-inner {
     }
 
     .s-header__nav-wrap .s-header__nav li ul li a {
-        font-size   : calc(var(--text-size) * 0.8889);
-        font-weight : 300;
-        line-height : var(--vspace-0_5);
-        color       : var(--color-text-light);
-        padding     : .4rem 1.6rem .2rem 3.2rem;
+        font-size      : calc(var(--text-size) * 0.8889);
+        font-weight    : 300;
+        line-height    : 1.5;
+        color          : var(--color-text-light);
+        padding        : .4rem 1.6rem .2rem 3.2rem;
+        white-space    : normal;
+        overflow-wrap  : break-word;
     }
 
     .s-header__nav-wrap .s-header__nav li ul li a:focus,
@@ -3870,9 +3886,30 @@ body.search-is-visible .s-header__search-inner {
         font-size : var(--text-xxxl);
     }
 
+    /* backdrop-filter on .is-scrolled traps position:fixed children inside the header bar */
+    .s-header.is-scrolled {
+        -webkit-backdrop-filter : none;
+        backdrop-filter         : none;
+    }
+
+    body.menu-is-open .s-header {
+        z-index : 10002;
+    }
+
     body.menu-is-open .s-header__nav-wrap {
         opacity    : 1;
         visibility : visible;
+        z-index    : 10001;
+        position   : fixed;
+        inset      : 0;
+        width      : 100%;
+        height     : 100%;
+        min-height : 100dvh;
+        max-height : 100dvh;
+    }
+
+    body.menu-is-open .s-header__menu-toggle {
+        z-index : 10003;
     }
 }
 

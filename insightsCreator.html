@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ARG Naples — Insights Creator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        :root {
+            --navy: #002348;
+            --ink: #111;
+            --muted: #666;
+            --border: rgba(0, 35, 72, 0.14);
+            --bg: #f4f6f8;
+            --card: #fff;
+            --accent: #003a7a;
+            --ok: #1b6b3a;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.55; }
+        .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+        .banner { background: var(--navy); color: #fff; padding: 1.5rem 1.25rem; border-radius: 8px; margin-bottom: 1.5rem; }
+        .banner h1 { margin: 0 0 0.4rem; font-size: 1.5rem; }
+        .banner p { margin: 0; color: rgba(255,255,255,0.88); font-size: 0.95rem; }
+        .steps { display: flex; flex-direction: column; gap: 1.25rem; }
+        .step {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .step__head {
+            background: #e8edf2;
+            padding: 0.85rem 1.15rem;
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: var(--navy);
+            letter-spacing: 0.06em;
+        }
+        .step__body { padding: 1.15rem; }
+        .dropzone {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 1.75rem 1rem;
+            text-align: center;
+            background: #fafbfc;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .dropzone:hover, .dropzone.dragover { border-color: var(--navy); background: #f0f4f8; }
+        .dropzone strong { display: block; font-size: 1rem; margin-bottom: 0.35rem; }
+        .dropzone span { font-size: 0.85rem; color: var(--muted); }
+        input[type="file"] { display: none; }
+        textarea {
+            width: 100%;
+            min-height: 11rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            font: inherit;
+            resize: vertical;
+        }
+        .thumb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 0.65rem;
+            margin-top: 1rem;
+        }
+        .thumb {
+            position: relative;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            aspect-ratio: 4/3;
+            background: #eee;
+        }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .thumb button {
+            position: absolute; top: 4px; right: 4px;
+            width: 22px; height: 22px; border: none; border-radius: 50%;
+            background: rgba(0,0,0,0.65); color: #fff; font-size: 14px; line-height: 1; cursor: pointer;
+        }
+        .thumb small {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: rgba(0,35,72,0.85); color: #fff;
+            font-size: 0.62rem; padding: 0.2rem 0.35rem;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .auto-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        @media (max-width: 560px) { .auto-grid { grid-template-columns: 1fr; } }
+        .auto-field label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            margin-bottom: 0.25rem;
+        }
+        .auto-field input, .auto-field select {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.55rem 0.65rem;
+            font: inherit;
+            background: #f9fafb;
+        }
+        .auto-field input:focus, .auto-field select:focus { background: #fff; outline: 2px solid rgba(0,35,72,0.2); }
+        .auto-field--full { grid-column: 1 / -1; }
+        .badge-auto {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            background: #dce8f4;
+            color: var(--navy);
+            padding: 0.1rem 0.45rem;
+            border-radius: 99px;
+            margin-left: 0.35rem;
+            vertical-align: middle;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        .publish-box {
+            background: #e8f4ec;
+            border: 1px solid #b8dcc4;
+            border-radius: 8px;
+            padding: 1.15rem;
+            margin-top: 0.5rem;
+        }
+        .publish-box h3 { margin: 0 0 0.5rem; font-size: 1rem; color: var(--ok); }
+        .publish-box ol { margin: 0 0 1rem; padding-left: 1.2rem; font-size: 0.9rem; }
+        .publish-box li { margin-bottom: 0.35rem; }
+        .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+        button {
+            appearance: none; border: none; border-radius: 6px;
+            padding: 0.85rem 1.25rem; font: inherit; font-size: 0.92rem; font-weight: 700; cursor: pointer;
+        }
+        .btn-main { background: var(--navy); color: #fff; font-size: 1rem; padding: 1rem 1.5rem; }
+        .btn-main:hover { background: var(--accent); }
+        .btn-secondary { background: #dce4ec; color: var(--navy); }
+        .status { margin-top: 0.85rem; font-size: 0.88rem; min-height: 1.2rem; }
+        .status.ok { color: var(--ok); }
+        .status.err { color: #b42318; }
+        .preview-wrap { margin-top: 1.25rem; }
+        .preview-wrap iframe {
+            width: 100%; height: 380px; border: 1px solid var(--border);
+            border-radius: 6px; background: #fff;
+        }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="banner">
+        <h1>Insights Creator</h1>
+        <p>Paste your article or drop a Word file. Drop photos, then reference them in the text. We fill in headline, author, and date. One ZIP download for the website. <a href="instructions.html" style="color:#fff;text-decoration:underline;">Full instructions</a></p>
+    </div>
+
+    <div class="steps">
+
+        <!-- STEP 1 -->
+        <section class="step">
+            <div class="step__head">STEP 1 — Your article text</div>
+            <div class="step__body">
+                <div class="dropzone" id="docDrop" tabindex="0">
+                    <strong>Drop a Word file here</strong>
+                    <span>.docx works best · or click to choose file</span>
+                </div>
+                <input type="file" id="docInput" accept=".docx,.doc,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                <p style="margin:1rem 0 0.5rem;font-size:0.88rem;color:var(--muted);">Or paste / type your article below:</p>
+                <textarea id="body" placeholder="First line = headline.
+Second line = subheadline (optional), or subheadline=&quot;Your subtitle here&quot;
+
+headlineImage=&quot;cover-photo.jpg&quot;
+
+Your opening paragraph…
+
+inlineImage=&quot;chart.png&quot;
+
+More text with a [link label](communities/port.html) inline…
+
+addCta title=&quot;Explore Port Royal Listings&quot;
+
+hyperlink label=&quot;Request a private market evaluation&quot; url=&quot;#pme-request&quot;"></textarea>
+                <p class="hint" style="margin-top:0.65rem;font-size:0.82rem;color:var(--muted);">
+                    <strong>Subheadline:</strong> second line after the headline, or <code>subheadline="…"</code> ·
+                    <strong>Images:</strong> <code>headlineImage="file.jpg"</code> · <code>inlineImage="file.jpg"</code> ·
+                    <strong>Links:</strong> <code>[label](url)</code> in any sentence ·
+                    <code>hyperlink label="…" url="…"</code> on its own line ·
+                    <strong>CTA:</strong> <code>addCta title="…"</code> — centered navy button; opens the private market evaluation modal · blank line before/after images &amp; CTAs
+                </p>
+            </div>
+        </section>
+
+        <!-- STEP 2 -->
+        <section class="step">
+            <div class="step__head">STEP 2 — Photos (optional)</div>
+            <div class="step__body">
+                <div class="dropzone" id="imgDrop" tabindex="0">
+                    <strong>Drop images here</strong>
+                    <span>JPG, PNG, WEBP · keep the file name — use it in headlineImage= or inlineImage=</span>
+                </div>
+                <input type="file" id="imgInput" accept="image/*" multiple>
+                <div class="thumb-grid" id="thumbGrid"></div>
+            </div>
+        </section>
+
+        <!-- STEP 3 -->
+        <section class="step">
+            <div class="step__head">STEP 3 — Review (auto-filled — edit if needed)</div>
+            <div class="step__body">
+                <div class="auto-grid">
+                    <div class="auto-field auto-field--full">
+                        <label>Headline <span class="badge-auto">auto</span></label>
+                        <input type="text" id="title">
+                    </div>
+                    <div class="auto-field auto-field--full">
+                        <label>Subheadline <span class="badge-auto">auto</span></label>
+                        <input type="text" id="subheadline" placeholder="One line under the headline — optional">
+                    </div>
+                    <div class="auto-field">
+                        <label>Author <span class="badge-auto">auto</span></label>
+                        <select id="author">
+                            <option>Michael Giacalone</option>
+                            <option>Paul Arpin</option>
+                            <option>Peter Reppucci</option>
+                            <option>ARG Naples</option>
+                        </select>
+                    </div>
+                    <div class="auto-field">
+                        <label>Date <span class="badge-auto">auto</span></label>
+                        <input type="date" id="date">
+                    </div>
+                    <div class="auto-field">
+                        <label>Category <span class="badge-auto">auto</span></label>
+                        <select id="category">
+                            <option>Market Update</option>
+                            <option>Market Insight</option>
+                            <option>Market Report</option>
+                            <option>Buyer's Guide</option>
+                            <option>Seller's Guide</option>
+                            <option>Neighborhood Spotlight</option>
+                            <option>Naples History</option>
+                            <option>Photography</option>
+                            <option>Lifestyle</option>
+                        </select>
+                    </div>
+                    <div class="auto-field">
+                        <label>Read time <span class="badge-auto">auto</span></label>
+                        <input type="text" id="readTime" readonly>
+                    </div>
+                    <div class="auto-field auto-field--full">
+                        <label>Short blurb for Insights page <span class="badge-auto">auto</span></label>
+                        <input type="text" id="excerpt">
+                    </div>
+                    <div class="auto-field auto-field--full" id="slugRow">
+                        <label>File name <span class="badge-auto">auto</span></label>
+                        <input type="text" id="slug" readonly>
+                    </div>
+                </div>
+
+                <div class="publish-box">
+                    <h3>When you are ready — 3 things to do</h3>
+                    <ol>
+                        <li><strong>Download package</strong> — saves a ZIP with your article + photos in the right folders.</li>
+                        <li><strong>Unzip</strong> into the website project folder — article goes in <code>Insights/</code>, photos in <code>assets/</code>.</li>
+                        <li><strong>Copy listing snippet</strong> — paste at the top of <code>blog.html</code> (inside <code>blog-grid</code>), then commit and push.</li>
+                    </ol>
+                    <div class="actions">
+                        <button type="button" class="btn-main" id="btnZip">Download ZIP package</button>
+                        <button type="button" class="btn-secondary" id="btnSnippet">Copy listing snippet</button>
+                        <button type="button" class="btn-secondary" id="btnPreview">Refresh preview</button>
+                    </div>
+                    <p class="status" id="status" aria-live="polite"></p>
+                </div>
+
+                <div class="preview-wrap">
+                    <iframe id="preview" title="Preview" class="hidden"></iframe>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+
+    var SETTINGS_KEY = 'arg-insights-settings';
+    var INSIGHTS_DIR = 'Insights';
+    var ARTICLE_ROOT = '../';
+    var images = []; // { id, file, preview, fileName, baseName }
+    var IMG_TAG_RE = /^\s*(headlineImage|inlineImage)\s*=\s*["']([^"']+)["']\s*$/i;
+    var SUBHEADLINE_TAG_RE = /^\s*subheadline\s*=\s*["']([^"']+)["']\s*$/i;
+    var ADD_CTA_RE = /^\s*addCta\b/i;
+    var HYPERLINK_TAG_RE = /^\s*hyperlink\b/i;
+    var INLINE_LINK_RE = /\[([^\]]+)\]\(([^)]+)\)/g;
+    var IMG_HIDE_ONERROR = ' onerror="var p=this.parentElement;if(p)p.remove()"';
+    var SVG_AUTHOR = '<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.25" stroke="currentColor" stroke-width="1.5"/><path stroke="currentColor" stroke-width="1.5" d="M6.8475 19.25H17.1525C18.2944 19.25 19.174 18.2681 18.6408 17.2584C17.8563 15.7731 16.068 14 12 14C7.93201 14 6.14367 15.7731 5.35924 17.2584C4.82597 18.2681 5.70558 19.25 6.8475 19.25Z"/></svg>';
+    var SVG_CLOCK = '<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.25" stroke="currentColor" stroke-width="1.5"/><path stroke="currentColor" stroke-width="1.5" d="M12 8V12L14 14"/></svg>';
+    var SVG_BACK = '<svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.25 6.75L4.75 12L10.25 17.25"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.25 12H5"/></svg>';
+
+    var $ = function (id) { return document.getElementById(id); };
+
+    function setStatus(msg, type) {
+        var el = $('status');
+        el.textContent = msg || '';
+        el.className = 'status' + (type ? ' ' + type : '');
+    }
+
+    function slugify(text) {
+        return String(text || '').toLowerCase()
+            .replace(/['']/g, '').replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '').slice(0, 70) || 'insight-draft';
+    }
+
+    function formatDisplayDate(iso) {
+        if (!iso) return '';
+        var d = new Date(iso + 'T12:00:00');
+        return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+
+    function escapeHtml(s) {
+        return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function escapeAttr(s) { return escapeHtml(s).replace(/'/g,'&#39;'); }
+
+    function wordCount(text) {
+        return String(text || '').trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function estimateReadTime(text) {
+        var w = wordCount(text);
+        var mins = Math.max(1, Math.round(w / 200));
+        return mins + ' min read';
+    }
+
+    function guessHeadlineFromBody(body) {
+        var lines = String(body || '').replace(/\r\n/g, '\n').split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+        if (!lines.length) return '';
+        var first = lines[0];
+        if (first.length <= 100 && first.split(' ').length <= 14) return first;
+        var sentence = first.match(/^[^.!?]+[.!?]?/);
+        if (sentence && sentence[0].length <= 90) return sentence[0].replace(/[.!?]$/, '').trim();
+        return first.slice(0, 80).trim() + (first.length > 80 ? '…' : '');
+    }
+
+    function guessExcerpt(body) {
+        var headline = guessHeadlineFromBody(body);
+        var sub = guessSubheadline(body, headline);
+        var paras = stripFormattingTags(String(body || '').replace(/\r\n/g, '\n')).split(/\n\n+/);
+        var text = '';
+        for (var i = 0; i < paras.length; i++) {
+            text = paras[i].replace(/\n/g, ' ').trim();
+            if (text === headline || (sub && text === sub)) continue;
+            if (text.length > 40) break;
+        }
+        if (!text || text === headline || (sub && text === sub)) {
+            text = stripFormattingTags(String(body || '').replace(/\n/g, ' ').trim());
+        }
+        if (text.length > 200) text = text.slice(0, 197).trim() + '…';
+        return text;
+    }
+
+    function extractSubheadlineTag(text) {
+        var m = String(text || '').match(/^\s*subheadline\s*=\s*["']([^"']+)["']\s*$/im);
+        return m ? m[1].trim() : '';
+    }
+
+    function guessSubheadline(body, headline) {
+        var fromTag = extractSubheadlineTag(body);
+        if (fromTag) return fromTag;
+        var lines = String(body || '').replace(/\r\n/g, '\n').split('\n').map(function (l) { return l.trim(); });
+        var i = 0;
+        if (lines[i] && headline && lines[i] === headline.trim()) i++;
+        while (i < lines.length && !lines[i]) i++;
+        if (i >= lines.length) return '';
+        var line = lines[i];
+        if (IMG_TAG_RE.test(line) || SUBHEADLINE_TAG_RE.test(line) || ADD_CTA_RE.test(line) || HYPERLINK_TAG_RE.test(line)) return '';
+        if (line.length > 140 || line.split(' ').length > 22) return '';
+        return line;
+    }
+
+    function getSlug() {
+        var base = slugify($('title').value || 'insight');
+        var d = ($('date').value || '').slice(0, 7);
+        return 'insight-' + base + (d ? '-' + d.replace('-', '') : '');
+    }
+
+    function baseNameOf(path) {
+        var s = String(path || '').trim().replace(/^assets\//i, '');
+        return s.split('/').pop().split('\\').pop().toLowerCase();
+    }
+
+    function isUrl(ref) {
+        return /^https?:\/\//i.test(String(ref || '').trim());
+    }
+
+    function assetPath(ref) {
+        var s = String(ref || '').trim();
+        if (isUrl(s)) return s;
+        if (/^assets\//i.test(s)) return s;
+        return 'assets/' + s.replace(/^\/+/, '');
+    }
+
+    function articleAssetPath(ref) {
+        var s = String(ref || '').trim();
+        if (isUrl(s)) return s;
+        var path = assetPath(s.replace(/^\.\.\//, ''));
+        return ARTICLE_ROOT + path;
+    }
+
+    function normalizeArticleHref(href) {
+        var h = String(href || '').trim();
+        if (!h || /^https?:\/\//i.test(h) || h.charAt(0) === '#' || h.indexOf('../') === 0 || h.indexOf('mailto:') === 0) {
+            return h;
+        }
+        return ARTICLE_ROOT + h.replace(/^\//, '');
+    }
+
+    function listingImageSrc(src) {
+        if (!src) return '';
+        return String(src).replace(/^\.\.\/assets\//, 'assets/');
+    }
+
+    function insightArticleFile(slug) {
+        return INSIGHTS_DIR + '/' + slug + '.html';
+    }
+
+    function uploadIndex() {
+        var map = {};
+        images.forEach(function (img) {
+            map[img.baseName] = img;
+        });
+        return map;
+    }
+
+    function resolveImageRef(ref, forPreview) {
+        var raw = String(ref || '').trim();
+        if (!raw) return null;
+        if (isUrl(raw)) {
+            return { src: raw, publish: true };
+        }
+        var path = articleAssetPath(raw);
+        var hit = uploadIndex()[baseNameOf(raw)];
+        if (forPreview) {
+            if (hit) return { src: hit.preview, publish: true };
+            return { src: path, publish: true };
+        }
+        return { src: path, publish: true };
+    }
+
+    function stripFormattingTags(text) {
+        return String(text || '')
+            .replace(/^\s*(headlineImage|inlineImage|subheadline)\s*=\s*["'][^"']+["']\s*$/gim, '')
+            .replace(/^\s*addCta\b.*$/gim, '')
+            .replace(/^\s*hyperlink\b.*$/gim, '')
+            .trim();
+    }
+
+    function parseQuotedAttrs(line) {
+        var attrs = {};
+        String(line || '').replace(/\b(\w+)=["']([^"']*)["']/g, function (_, key, val) {
+            attrs[key.toLowerCase()] = val;
+        });
+        return attrs;
+    }
+
+    function guessCategory(body) {
+        var t = String(body || '').toLowerCase();
+        if (/neighborhood|port royal|moorings|pelican|aqualane|olde naples|park shore/.test(t)) return 'Neighborhood Spotlight';
+        if (/\bbuyer|\bbuying\b|\bpurchase\b/.test(t)) return "Buyer's Guide";
+        if (/\bseller|\bselling\b|\blist your\b/.test(t)) return "Seller's Guide";
+        if (/history|founding|1880|haldeman/.test(t)) return 'Naples History';
+        if (/lifestyle|dining|culture|restaurant/.test(t)) return 'Lifestyle';
+        if (/photography|photo gallery|twilight/.test(t)) return 'Photography';
+        if (/market report|quarterly|inventory|median price/.test(t)) return 'Market Report';
+        if (/market update|record sale|closed at|just sold/.test(t)) return 'Market Update';
+        return 'Market Insight';
+    }
+
+    function linkAttrs(url) {
+        var href = normalizeArticleHref(String(url || '').trim());
+        var cls = href === '#pme-request' ? ' class="js-pme-modal"' : '';
+        return { href: href, cls: cls };
+    }
+
+    function formatInlineText(text) {
+        var src = String(text || '');
+        var out = [];
+        var last = 0;
+        var re = new RegExp(INLINE_LINK_RE.source, 'g');
+        var m;
+        while ((m = re.exec(src)) !== null) {
+            out.push(escapeHtml(src.slice(last, m.index)));
+            var link = linkAttrs(m[2]);
+            out.push('<a href="' + escapeAttr(link.href) + '"' + link.cls + '>' + escapeHtml(m[1]) + '</a>');
+            last = m.lastIndex;
+        }
+        out.push(escapeHtml(src.slice(last)));
+        return out.join('');
+    }
+
+    function addCtaHtml(attrs) {
+        var title = attrs.title || 'Request A Private Market Evaluation';
+        return '<p class="post-inline-cta">\n' +
+            '                        <a href="#pme-request" class="post-inline-cta__btn js-pme-modal">' + escapeHtml(title) + '</a>\n' +
+            '                    </p>';
+    }
+
+    function hyperlinkHtml(attrs) {
+        var label = attrs.label || attrs.text || '';
+        var url = attrs.url || attrs.link || attrs.href || '';
+        if (!label || !url) return '';
+        var link = linkAttrs(url);
+        return '<p><a href="' + escapeAttr(link.href) + '"' + link.cls + '>' + escapeHtml(label) + '</a></p>';
+    }
+
+    function extractHeadlineImage(text) {
+        var m = String(text || '').match(/^\s*headlineImage\s*=\s*["']([^"']+)["']\s*$/im);
+        if (m) return m[1].trim();
+        m = String(text || '').match(/headlineImage\s*=\s*["']([^"']+)["']/i);
+        return m ? m[1].trim() : '';
+    }
+
+    function renderThumbs() {
+        var grid = $('thumbGrid');
+        grid.innerHTML = '';
+        images.forEach(function (img, i) {
+            var div = document.createElement('div');
+            div.className = 'thumb';
+            div.innerHTML =
+                '<img src="' + img.preview + '" alt="">' +
+                '<button type="button" data-id="' + img.id + '" title="Remove">×</button>' +
+                '<small>' + escapeHtml(img.fileName) + '</small>';
+            grid.appendChild(div);
+        });
+        grid.querySelectorAll('button').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var id = btn.getAttribute('data-id');
+                images = images.filter(function (im) { return im.id !== id; });
+                renderThumbs();
+                runAutoFill();
+            });
+        });
+    }
+
+    function addImages(fileList) {
+        Array.prototype.forEach.call(fileList, function (file) {
+            if (!file.type || file.type.indexOf('image/') !== 0) return;
+            var fileName = file.name;
+            images.push({
+                id: 'img-' + Date.now() + '-' + Math.random().toString(36).slice(2),
+                file: file,
+                preview: URL.createObjectURL(file),
+                fileName: fileName,
+                baseName: baseNameOf(fileName)
+            });
+        });
+        renderThumbs();
+        runAutoFill();
+    }
+
+    function getHeadlineImageSrc(forPreview) {
+        var ref = extractHeadlineImage($('body').value);
+        if (!ref) return '';
+        var resolved = resolveImageRef(ref, forPreview);
+        return resolved ? resolved.src : '';
+    }
+
+    function runAutoFill() {
+        var body = stripFormattingTags($('body').value).trim();
+        if (!$('title').dataset.userEdited) {
+            $('title').value = guessHeadlineFromBody(body);
+        }
+        if (!$('subheadline').dataset.userEdited) {
+            $('subheadline').value = guessSubheadline(body, $('title').value);
+        }
+        $('date').value = $('date').value || new Date().toISOString().slice(0, 10);
+        $('readTime').value = estimateReadTime(body);
+        if (!$('category').dataset.userEdited) {
+            $('category').value = guessCategory($('body').value);
+        }
+        if (!$('excerpt').dataset.userEdited) {
+            $('excerpt').value = guessExcerpt(body);
+        }
+        $('slug').value = insightArticleFile(getSlug());
+        updatePreview(true);
+    }
+
+    function inlineImageHtml(ref, forPreview) {
+        var resolved = resolveImageRef(ref, forPreview);
+        if (!resolved) return '';
+        return '<figure class="post-inline-image"><img src="' + escapeAttr(resolved.src) + '" alt=""' +
+            (forPreview ? '' : IMG_HIDE_ONERROR) + '></figure>';
+    }
+
+    function parseLine(line, forPreview) {
+        if (SUBHEADLINE_TAG_RE.test(line)) return '';
+        if (ADD_CTA_RE.test(line)) return addCtaHtml(parseQuotedAttrs(line));
+        if (HYPERLINK_TAG_RE.test(line)) return hyperlinkHtml(parseQuotedAttrs(line));
+        var m = line.match(IMG_TAG_RE);
+        if (m) {
+            if (m[1].toLowerCase() === 'headlineimage') return '';
+            if (m[1].toLowerCase() === 'inlineimage') return inlineImageHtml(m[2], forPreview);
+        }
+        return null;
+    }
+
+    function flushTextLines(textLines, html) {
+        if (!textLines.length) return;
+        var first = textLines[0];
+        if (first.indexOf('### ') === 0) {
+            html.push('<h3>' + formatInlineText(first.slice(4)) + '</h3>');
+            textLines.slice(1).forEach(function (l) { html.push('<p>' + formatInlineText(l) + '</p>'); });
+        } else if (first.indexOf('## ') === 0) {
+            html.push('<h2>' + formatInlineText(first.slice(3)) + '</h2>');
+            textLines.slice(1).forEach(function (l) { html.push('<p>' + formatInlineText(l) + '</p>'); });
+        } else if (first.indexOf('> ') === 0) {
+            html.push('<blockquote><p>' + formatInlineText(textLines.map(function (l) { return l.replace(/^>\s?/, ''); }).join(' ')) + '</p></blockquote>');
+        } else {
+            html.push('<p>' + formatInlineText(textLines.join(' ')) + '</p>');
+        }
+    }
+
+    function parseBody(text, skipFirstLine, forPreview) {
+        var raw = String(text || '').replace(/\r\n/g, '\n');
+        var lines = raw.split('\n');
+        var sub = $('subheadline').value.trim();
+        if (skipFirstLine) {
+            var start = 0;
+            while (start < lines.length && !lines[start].trim()) start++;
+            if (start < lines.length) {
+                lines.splice(start, 1);
+                while (lines.length && !lines[0].trim()) lines.shift();
+            }
+            if (sub && lines.length && lines[0].trim() === sub) {
+                lines.shift();
+                while (lines.length && !lines[0].trim()) lines.shift();
+            }
+        }
+        var blocks = lines.join('\n').split(/\n\n+/);
+        var html = [];
+        blocks.forEach(function (block) {
+            var blines = block.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+            if (!blines.length) return;
+
+            var textBuffer = [];
+            blines.forEach(function (line) {
+                var special = parseLine(line, forPreview);
+                if (special !== null) {
+                    flushTextLines(textBuffer, html);
+                    textBuffer = [];
+                    if (special) html.push(special);
+                    return;
+                }
+                textBuffer.push(line);
+            });
+            flushTextLines(textBuffer, html);
+        });
+        return html.join('\n\n                    ') || '<p>Article text goes here.</p>';
+    }
+
+    function authorProfile(name) {
+        var profiles = {
+            'Michael Giacalone': {
+                photo: ARTICLE_ROOT + 'assets/test_michael.jpg',
+                title: 'Global Real Estate Advisor · Premier Sotheby\'s International Realty · Naples, FL',
+                bio: 'Michael is a consistent $100M+ producer with 17+ years of experience and 300+ closed transactions across Naples. A Premier Sotheby\'s Hall of Fame honoree, he ranks among the top 1.5% of agents companywide and represents buyers and sellers from Port Royal to Marco Island.'
+            },
+            'Paul Arpin': {
+                photo: ARTICLE_ROOT + 'assets/test_paul.jpg',
+                title: 'Luxury Real Estate Advisor · Premier Sotheby\'s International Realty · Naples, FL',
+                bio: 'Paul brings over 25 years of luxury real estate experience across Naples and Southwest Florida, guiding buyers and sellers through the region\'s most significant transactions.'
+            },
+            'Peter Reppucci': {
+                photo: ARTICLE_ROOT + 'assets/test_pete.jpg',
+                title: 'Luxury Real Estate Advisor · Premier Sotheby\'s International Realty · Naples, FL',
+                bio: 'Peter serves Naples luxury buyers and sellers with deep local expertise and a client-first approach across the Gulf Coast\'s premier communities.'
+            },
+            'ARG Naples': {
+                photo: ARTICLE_ROOT + 'assets/test_michael.jpg',
+                title: 'Premier Sotheby\'s International Realty · Naples, FL',
+                bio: 'ARG Naples delivers concierge-level service across Naples\' most prestigious communities — Port Royal, Olde Naples, Aqualane Shores, and beyond.'
+            }
+        };
+        return profiles[name] || profiles['Michael Giacalone'];
+    }
+
+    function buildData(forPreview) {
+        return {
+            title: $('title').value.trim() || 'Untitled insight',
+            subheadline: $('subheadline').value.trim(),
+            slug: getSlug(),
+            category: $('category').value,
+            date: $('date').value,
+            readTime: $('readTime').value,
+            author: $('author').value,
+            excerpt: $('excerpt').value.trim(),
+            coverSrc: getHeadlineImageSrc(forPreview),
+            body: $('body').value
+        };
+    }
+
+    function siteHeader() {
+        var r = ARTICLE_ROOT;
+        return '<header id="masthead" class="s-header">\n' +
+            '            <div class="s-header__branding">\n' +
+            '                <p class="site-title"><a href="' + r + 'index.html"><img src="https://cdn-cws.datafloat.com/PSB/images/company/PSB/logo-white.png" alt="ARG Naples"></a></p>\n' +
+            '            </div>\n' +
+            '            <div class="row s-header__navigation">\n' +
+            '                <nav class="s-header__nav-wrap">\n' +
+            '                    <h3 class="s-header__nav-heading">Navigate to</h3>\n' +
+            '                    <ul class="s-header__nav">\n' +
+            '                        <li class="has-children"><a href="#0" title="">Featured Neighborhoods</a>\n' +
+            '                            <ul class="sub-menu" style="color: white">\n' +
+            '                                <li><a href="' + r + 'communities/port.html">Port Royal</a></li>\n' +
+            '                                <li><a href="' + r + 'communities/aqualane.html">Aqualane Shores</a></li>\n' +
+            '                                <li><a href="' + r + 'communities/olde.html">Olde Naples</a></li>\n' +
+            '                                <li><a href="' + r + 'communities/moorings.html">The Moorings</a></li>\n' +
+            '                                <li><a href="' + r + 'communities/park.html">Park Shore</a></li>\n' +
+            '                                <li><a href="' + r + 'communities/pelican.html">Pelican Bay</a></li>\n' +
+            '                            </ul>\n' +
+            '                        </li>\n' +
+            '                        <li><a href="' + r + 'soldProperties.html" title="">Significant Sales</a></li>\n' +
+            '                        <li><a href="' + r + 'developments.html" title="">New Developments</a></li>\n' +
+            '                        <li class="has-children current-menu-item"><a href="#0" title="">Resources</a>\n' +
+            '                            <ul class="sub-menu" style="color: white">\n' +
+            '                                <li class="current-menu-item"><a href="' + r + 'blog.html">Insights</a></li>\n' +
+            '                                <li><a href="#pme-request" class="js-pme-modal">Request A Private Market Evaluation</a></li>\n' +
+            '                            </ul>\n' +
+            '                        </li>\n' +
+            '                        <li><a href="' + r + 'about.html" title="">About Us</a></li>\n' +
+            '                    </ul>\n' +
+            '                </nav>\n' +
+            '            </div>\n' +
+            '            <a class="s-header__menu-toggle" href="#0"><span>Menu</span></a>\n' +
+            '        </header>';
+    }
+
+    function siteFooter() {
+        var r = ARTICLE_ROOT;
+        return '<footer id="colophon" class="s-footer">\n' +
+            '            <div class="row s-footer__subscribe">\n' +
+            '                <div class="column lg-12">\n' +
+            '                    <h2>Looking to buy or sell?</h2>\n' +
+            '                    <p>Let us know how we can help you.</p>\n' +
+            '                    <form id="mc-form" class="mc-form">\n' +
+            '                        <input type="email" name="EMAIL" id="mce-EMAIL" class="u-fullwidth text-center" placeholder="Your Email Address" required>\n' +
+            '                        <input type="submit" name="subscribe" value="Subscribe" class="btn--small btn--primary u-fullwidth">\n' +
+            '                        <div class="mc-status"></div>\n' +
+            '                    </form>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="row s-footer__main">\n' +
+            '                <div class="column lg-5 md-6 tab-12 s-footer__about">\n' +
+            '                    <h4>ARG Naples</h4>\n' +
+            '                    <p>Our proven performance and exceptional marketing expertise consistently deliver the results our clients desire.</p>\n' +
+            '                </div>\n' +
+            '                <div class="column lg-5 md-6 tab-12">\n' +
+            '                    <div class="row">\n' +
+            '                        <div class="column lg-6">\n' +
+            '                            <h4>Site Links</h4>\n' +
+            '                            <ul class="link-list">\n' +
+            '                                <li><a href="' + r + 'index.html">Home</a></li>\n' +
+            '                                <li><a href="' + r + 'developments.html">New Developments</a></li>\n' +
+            '                                <li><a href="' + r + 'blog.html">Insights</a></li>\n' +
+            '                                <li><a href="' + r + 'soldProperties.html">Significant Sales</a></li>\n' +
+            '                                <li><a href="' + r + 'about.html">About</a></li>\n' +
+            '                            </ul>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="row s-footer__bottom">\n' +
+            '                <div class="column lg-12 tab-12">\n' +
+            '                    <div class="ss-copyright"><span>&copy; Copyright ARG Naples</span></div>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="ss-go-top">\n' +
+            '                <a class="smoothscroll" title="Back to Top" href="#top">\n' +
+            '                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.25 10.25L12 4.75L6.75 10.25"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 19.25V5.75"/></svg>\n' +
+            '                </a>\n' +
+            '            </div>\n' +
+            '        </footer>';
+    }
+
+    function buildHtml(data, forPreview) {
+        var heroClass = data.coverSrc ? 'post-hero' : 'post-hero post-hero--text-only';
+        var coverAlt = data.subheadline || data.title;
+        var cover = data.coverSrc
+            ? '\n        <div class="post-cover">\n' +
+              '            <img src="' + escapeAttr(data.coverSrc) + '" alt="' + escapeAttr(coverAlt) + '"' +
+              (forPreview ? '' : IMG_HIDE_ONERROR) + '>\n' +
+              '        </div>\n'
+            : '';
+        var subtitle = data.subheadline
+            ? '\n            <p class="post-hero__subtitle">' + escapeHtml(data.subheadline) + '</p>\n'
+            : '';
+        var bodyHtml = parseBody(data.body, true, forPreview);
+        var author = authorProfile(data.author);
+
+        var r = ARTICLE_ROOT;
+        return '<!DOCTYPE html>\n<html lang="en" class="no-js">\n<head>\n' +
+            '    <meta charset="utf-8">\n' +
+            '    <meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+            '    <title>' + escapeHtml(data.title) + ' | ARG Naples</title>\n' +
+            '    <script>document.documentElement.classList.remove(\'no-js\');document.documentElement.classList.add(\'js\');<\/script>\n' +
+            '    <link rel="stylesheet" href="' + r + 'css/vendor.css">\n' +
+            '    <link rel="stylesheet" href="' + r + 'css/styles.css">\n' +
+            '    <link rel="stylesheet" href="' + r + 'realestate.css">\n' +
+            '    <link rel="stylesheet" href="' + r + 'css/blog-post-article.css">\n' +
+            '    <link rel="apple-touch-icon" sizes="180x180" href="https://www.sothebysrealty.com/favicon.ico">\n' +
+            '    <link rel="icon" type="image/png" sizes="32x32" href="https://www.sothebysrealty.com/favicon.ico">\n' +
+            '    <link rel="icon" type="image/png" sizes="16x16" href="https://www.sothebysrealty.com/favicon.ico">\n' +
+            '</head>\n<body id="top">\n' +
+            '    <div id="preloader"><div id="loader" class="dots-fade"><div></div><div></div><div></div></div></div>\n' +
+            '    <div id="page" class="s-pagewrap ss-home">\n' +
+            siteHeader() + '\n' +
+            '        <div class="' + heroClass + '">\n' +
+            '            <p class="post-hero__eyebrow">' + escapeHtml(data.category) + ' &nbsp;·&nbsp; ' + escapeHtml(formatDisplayDate(data.date)) + '</p>\n' +
+            '            <h1 class="post-hero__title">' + escapeHtml(data.title) + '</h1>\n' +
+            subtitle +
+            '            <div class="post-hero__meta">\n' +
+            '                <span class="post-hero__meta-item">' + SVG_AUTHOR + escapeHtml(data.author) + '</span>\n' +
+            '                <span class="post-hero__meta-item">' + SVG_CLOCK + escapeHtml(data.readTime) + '</span>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            cover +
+            '        <article>\n' +
+            '            <div class="post-wrap">\n' +
+            '                <a href="' + r + 'blog.html" class="post-back">' + SVG_BACK + ' Back to Insights</a>\n' +
+            '                <div class="post-body">\n' +
+            '                    ' + bodyHtml + '\n' +
+            '                </div>\n' +
+            '                <div class="post-author">\n' +
+            '                    <img src="' + escapeAttr(author.photo) + '" alt="' + escapeAttr(data.author) + '">\n' +
+            '                    <div>\n' +
+            '                        <p class="post-author__name">' + escapeHtml(data.author) + '</p>\n' +
+            '                        <p class="post-author__title">' + escapeHtml(author.title) + '</p>\n' +
+            '                        <p class="post-author__bio">' + escapeHtml(author.bio) + '</p>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '        </article>\n' +
+            siteFooter() + '\n' +
+            '    </div>\n' +
+            '    <script src="' + r + 'js/plugins.js"><\/script>\n' +
+            '    <script src="' + r + 'js/main.js"><\/script>\n' +
+            '    <script src="' + r + 'js/subscribe-footer.js"><\/script>\n' +
+            '    <script src="' + r + 'js/pme-modal.js"><\/script>\n' +
+            '</body>\n</html>';
+    }
+
+    function buildBlogCard(data, featured) {
+        var file = insightArticleFile(data.slug);
+        var img = listingImageSrc(data.coverSrc) || 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=85';
+        var cardClass = featured ? 'blog-card blog-card--featured' : 'blog-card';
+        return '                    <article class="' + cardClass + '">\n' +
+            '                        <div class="blog-card__image-wrap"><a href="' + file + '"><img src="' + escapeAttr(img) + '" alt="' + escapeAttr(data.title) + '"></a></div>\n' +
+            '                        <div class="blog-card__body">\n' +
+            '                            <p class="blog-card__category">' + escapeHtml(data.category) + '</p>\n' +
+            '                            <h2 class="blog-card__title"><a href="' + file + '">' + escapeHtml(data.title) + '</a></h2>\n' +
+            '                            <p class="blog-card__meta"><span>' + escapeHtml(data.author) + '</span><span>' + escapeHtml(formatDisplayDate(data.date)) + '</span></p>\n' +
+            '                            <p class="blog-card__excerpt">' + escapeHtml(data.excerpt) + '</p>\n' +
+            '                            <a href="' + file + '" class="blog-card__readmore">Read More</a>\n' +
+            '                        </div>\n                    </article>';
+    }
+
+    function updatePreview(silent) {
+        var data = buildData(true);
+        if (!data.body && !data.title) return;
+        $('preview').srcdoc = buildHtml(data, true);
+        $('preview').classList.remove('hidden');
+        if (!silent) setStatus('Preview updated.', 'ok');
+    }
+
+    function downloadZip() {
+        if (!$('body').value.trim()) {
+            setStatus('Add article text first (Step 1).', 'err');
+            return;
+        }
+        runAutoFill();
+        var data = buildData(false);
+        var htmlName = insightArticleFile(data.slug);
+        var zip = new JSZip();
+        zip.folder(INSIGHTS_DIR).file(data.slug + '.html', buildHtml(data, false));
+        var folder = zip.folder('assets');
+        images.forEach(function (img) {
+            folder.file(img.fileName, img.file);
+        });
+        var snippetName = data.slug + '-LISTING-SNIPPET.txt';
+        zip.file(snippetName, buildBlogCard(data, true) + '\n\nPaste at the TOP of <div class="blog-grid"> in blog.html. Links point to Insights/your-article.html. Photos stay in assets/.');
+
+        zip.generateAsync({ type: 'blob' }).then(function (blob) {
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = data.slug + '-package.zip';
+            a.click();
+            URL.revokeObjectURL(a.href);
+            setStatus('Downloaded ' + data.slug + '-package.zip — unzip (Insights/ + assets/), then paste snippet into blog.html.', 'ok');
+        });
+    }
+
+    function copySnippet() {
+        runAutoFill();
+        var snippet = buildBlogCard(buildData(false), true);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(snippet).then(function () {
+                setStatus('Snippet copied. In blog.html, paste right below <div class="blog-grid"> (links use Insights/ folder).', 'ok');
+            });
+        } else {
+            prompt('Copy this snippet into blog.html:', snippet);
+        }
+    }
+
+    function loadDoc(file) {
+        if (!file) return;
+        if (typeof mammoth === 'undefined') {
+            setStatus('Word import loading… paste text manually for now.', 'err');
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            mammoth.extractRawText({ arrayBuffer: e.target.result }).then(function (result) {
+                $('body').value = result.value.trim();
+                runAutoFill();
+                setStatus('Word file loaded. Headline and date filled in automatically.', 'ok');
+            }).catch(function () {
+                setStatus('Could not read that file. Save as .docx or paste text instead.', 'err');
+            });
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    function setupDropzone(zone, input, onFiles) {
+        zone.addEventListener('click', function () { input.click(); });
+        zone.addEventListener('dragover', function (e) { e.preventDefault(); zone.classList.add('dragover'); });
+        zone.addEventListener('dragleave', function () { zone.classList.remove('dragover'); });
+        zone.addEventListener('drop', function (e) {
+            e.preventDefault();
+            zone.classList.remove('dragover');
+            onFiles(e.dataTransfer.files);
+        });
+        input.addEventListener('change', function () {
+            onFiles(input.files);
+            input.value = '';
+        });
+    }
+
+    setupDropzone($('docDrop'), $('docInput'), function (files) {
+        if (files[0]) loadDoc(files[0]);
+    });
+    setupDropzone($('imgDrop'), $('imgInput'), addImages);
+
+    $('body').addEventListener('input', function () {
+        clearTimeout($('body')._t);
+        $('body')._t = setTimeout(runAutoFill, 400);
+    });
+    $('title').addEventListener('input', function () { $('title').dataset.userEdited = '1'; runAutoFill(); });
+    $('subheadline').addEventListener('input', function () { $('subheadline').dataset.userEdited = '1'; });
+    $('category').addEventListener('change', function () { $('category').dataset.userEdited = '1'; });
+    $('excerpt').addEventListener('input', function () { $('excerpt').dataset.userEdited = '1'; });
+
+    try {
+        var settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+        if (settings.author) $('author').value = settings.author;
+    } catch (e) { /* ignore */ }
+
+    $('author').addEventListener('change', function () {
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify({ author: $('author').value }));
+    });
+
+    $('btnZip').addEventListener('click', downloadZip);
+    $('btnSnippet').addEventListener('click', copySnippet);
+    $('btnPreview').addEventListener('click', function () { runAutoFill(); updatePreview(false); });
+
+    $('date').value = new Date().toISOString().slice(0, 10);
+    runAutoFill();
+})();
+</script>
+</body>
+</html>

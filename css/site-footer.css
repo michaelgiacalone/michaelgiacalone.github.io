@@ -1,0 +1,114 @@
+/* Site footer — ref: assets/bottom_nav.png */
+
+/* Subscribe uses default .s-footer / .s-footer__subscribe from styles.css (same as mikesellsnaples.com) */
+.s-footer.s-footer--premier {
+    background-color: var(--color-gray-4);
+    font-weight: 300;
+    padding-top: var(--vspace-4_5);
+    padding-bottom: 0;
+    position: relative;
+    color: var(--color-text);
+}
+
+.s-footer.s-footer--premier > .row.s-footer__subscribe {
+    max-width: 1000px;
+    margin-bottom: var(--vspace-2);
+}
+
+/* ── Premier bar (matches bottom_nav.png) ── */
+.s-footer__premier-bar {
+    background-color: #0a1830;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    padding: clamp(2.8rem, 5vw, 3.6rem) clamp(1.75rem, 5vw, 3.5rem);
+}
+
+.s-footer__premier-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: start;
+}
+
+.s-footer__premier-logo img {
+    display: block;
+    max-width: min(100%, 340px);
+    height: auto;
+}
+
+.s-footer__premier-label {
+    margin: 0 0 1rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #c9a96e;
+}
+
+.s-footer__premier-text {
+    margin: 0;
+    font-size: 1.12rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.s-footer__premier-text a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.12rem;
+}
+
+.s-footer__premier-text a:hover {
+    opacity: 0.85;
+}
+
+/* ── Legal block ── */
+.s-footer__legal {
+    background-color: #0a1830;
+    max-width: none;
+    margin: 0;
+    padding: clamp(1.8rem, 3vw, 2.4rem) clamp(1.75rem, 5vw, 3.5rem) clamp(2.4rem, 4vw, 3rem);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.s-footer__copyright {
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.s-footer__disclaimer {
+    margin: 0 auto;
+    max-width: 960px;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.52);
+}
+
+@media screen and (max-width: 1200px) {
+    .s-footer.s-footer--premier > .row.s-footer__subscribe {
+        max-width: 900px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .s-footer__premier-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .s-footer.s-footer--premier {
+        padding-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .s-footer.s-footer--premier {
+        padding-top: var(--vspace-3_5);
+    }
+}

@@ -5,6 +5,14 @@ const headers = {
     'Content-Type': 'application/json'
 };
 
+function escapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
 exports.handler = async function (event) {
     if (event.httpMethod === 'OPTIONS') {
         return { statusCode: 204, headers, body: '' };
@@ -35,10 +43,10 @@ exports.handler = async function (event) {
 
     const html =
         '<h2>New Private Market Evaluation Request</h2>' +
-        '<p><strong>Name:</strong> '    + name    + '</p>' +
-        '<p><strong>Email:</strong> '   + email   + '</p>' +
-        '<p><strong>Phone:</strong> '   + (phone   || 'not provided') + '</p>' +
-        '<p><strong>Address:</strong> ' + (address || 'not provided') + '</p>';
+        '<p><strong>Name:</strong> ' + escapeHtml(name) + '</p>' +
+        '<p><strong>Email:</strong> ' + escapeHtml(email) + '</p>' +
+        '<p><strong>Phone:</strong> ' + escapeHtml(phone || 'not provided') + '</p>' +
+        '<p><strong>Address:</strong> ' + escapeHtml(address || 'not provided') + '</p>';
 
     try {
         const res = await fetch('https://api.resend.com/emails', {

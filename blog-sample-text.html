@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="realestate.css">
     <link rel="stylesheet" href="css/blog-post-article.css">
+    <link rel="stylesheet" href="css/site-footer.css">
 
     <link rel="apple-touch-icon" sizes="180x180" href="https://www.sothebysrealty.com/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="https://www.sothebysrealty.com/favicon.ico">
@@ -55,7 +56,7 @@
                             <a href="#0" title="">Resources</a>
                             <ul class="sub-menu" style="color: white">
                                 <li class="current-menu-item"><a href="blog.html">Insights</a></li>
-                                <li><a href="single-video.html">Request A Private Market Evaluation</a></li>
+                                <li><a href="#pme-request" class="js-pme-modal">Request A Private Market Evaluation</a></li>
                             </ul>
                         </li>
                         <li><a href="about.html" title="">About Us</a></li>
@@ -121,7 +122,7 @@
                 <div class="post-cta">
                     <h2 class="post-cta__title">Know What Your Home Is Worth</h2>
                     <p class="post-cta__body">Request a complimentary private market evaluation from Naples' most trusted luxury real estate team.</p>
-                    <a href="single-video.html" class="post-cta__btn">Request My Evaluation</a>
+                    <a href="#pme-request" class="post-cta__btn js-pme-modal">Request My Evaluation</a>
                 </div>
 
             </div>
@@ -172,59 +173,10 @@
         </footer>
 
     </div>
-
-    <div id="pmeModal" class="pme-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pmeModalTitle">
-        <div class="pme-modal__backdrop"></div>
-        <div class="pme-modal__box">
-            <button class="pme-modal__close" aria-label="Close">&times;</button>
-            <p class="pme-modal__eyebrow">Exclusive Service</p>
-            <h2 class="pme-modal__title" id="pmeModalTitle">The Luxury Market Is Always Changing</h2>
-            <div class="pme-modal__bar"></div>
-            <p class="pme-modal__body">Do you want a professional private market valuation from Naples' most trusted luxury real estate team? Share your details below and we'll be in touch.</p>
-            <form class="pme-modal__form" id="pmeForm">
-                <input type="text" name="name" placeholder="Full Name" required>
-                <input type="email" name="email" placeholder="Email Address" required>
-                <input type="tel" name="phone" placeholder="Phone Number">
-                <input type="text" name="address" placeholder="Property Address (optional)">
-                <button type="submit" class="pme-modal__submit">Request My Private Market Evaluation</button>
-            </form>
-        </div>
-    </div>
-
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/site-footer.js"></script>
     <script src="js/subscribe-footer.js"></script>
-    <script>
-        (function () {
-            var modal = document.getElementById('pmeModal');
-            var form  = document.getElementById('pmeForm');
-            if (!modal || !form) return;
-            function openModal() { modal.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
-            function closeModal() { modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
-            document.querySelectorAll('a[href*="single-video"]').forEach(function (el) {
-                el.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
-            });
-            modal.querySelector('.pme-modal__backdrop').addEventListener('click', closeModal);
-            modal.querySelector('.pme-modal__close').addEventListener('click', closeModal);
-            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-                var btn = form.querySelector('.pme-modal__submit');
-                btn.disabled = true;
-                btn.textContent = 'Sending…';
-                fetch('/.netlify/functions/pme', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
-                    name: form.querySelector('[name="name"]').value,
-                    email: form.querySelector('[name="email"]').value,
-                    phone: form.querySelector('[name="phone"]').value,
-                    address: form.querySelector('[name="address"]').value
-                }) }).then(function (r) { return r.json(); }).then(function (res) {
-                    if (res.success) form.innerHTML = '<p class="pme-modal__thanks">Thank you! We\'ll be in touch shortly.</p>';
-                    else { btn.disabled = false; btn.textContent = 'Request My Private Market Evaluation'; alert('Something went wrong. Please try again.'); }
-                }).catch(function () {
-                    btn.disabled = false; btn.textContent = 'Request My Private Market Evaluation'; alert('Something went wrong. Please try again.');
-                });
-            });
-        })();
-    </script>
+    <script src="js/pme-modal.js"></script>
 </body>
 </html>

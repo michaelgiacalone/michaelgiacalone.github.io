@@ -1,6 +1,6 @@
 # Leads Setup (Netlify + Resend)
 
-This project already posts newsletter signups to `/.netlify/functions/subscribe`.
+This project posts newsletter signups to `/.netlify/functions/subscribe` and private market evaluation requests to `/.netlify/functions/pme`.
 Use these steps when you move the code to another person's computer/Netlify account.
 
 ## 1) Create Resend
@@ -38,6 +38,7 @@ If not, it falls back to `RESEND_TO`.
 
 - Push/deploy to Netlify.
 - Submit the footer subscribe form on any page.
+- Test **Request A Private Market Evaluation** (nav link or `addCta` button on an Insights article) — form posts to `/.netlify/functions/pme` using the same `RESEND_*` variables.
 
 ## 4) What gets captured now
 
@@ -47,5 +48,7 @@ Each signup email includes:
 - firm label (from payload, or `DEFAULT_FIRM`, or host fallback)
 - source page URL
 - request host
+
+**PME requests** capture name, email, phone, and property address (optional) and email them to `RESEND_TO`.
 
 No paid CRM is required to start. This is the quickest low-cost capture flow.
