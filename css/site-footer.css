@@ -63,6 +63,31 @@
     opacity: 0.85;
 }
 
+.s-footer__insight-contact {
+    background-color: #0a1830;
+    max-width: none;
+    margin: 0;
+    padding: clamp(1.8rem, 3vw, 2.4rem) clamp(1.75rem, 5vw, 3.5rem) 0;
+    text-align: center;
+}
+
+.s-footer__insight-contact p {
+    margin: 0 auto;
+    max-width: 720px;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.s-footer__insight-contact a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.s-footer__insight-contact a:hover {
+    opacity: 0.85;
+}
+
 /* ── Legal block ── */
 .s-footer__legal {
     background-color: #0a1830;

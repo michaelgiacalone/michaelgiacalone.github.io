@@ -11,9 +11,20 @@
     var DISCLAIMER =
         'Sotheby\'s International Realty&reg; and the Sotheby\'s International Realty Logo are service marks licensed to Sotheby\'s International Realty Affiliates LLC and used with permission. ' +
         'Premier Sotheby\'s International Realty fully supports the principles of the Fair Housing Act and the Equal Opportunity Act. ' +
-        'Each franchise is independently owned and operated.';
+        'Each franchise is independently owned and operated. Any services or products provided by independently owned and operated franchisees are not provided by, affiliated with or related to Sotheby\'s International Realty Affiliates LLC nor any of its affiliated companies.';
+
+    var INSIGHT_CONTACT =
+        'Michael can be easily reached at <a href="tel:+12394310321">239.431.0321</a>. Backed by the global reach of Sotheby\'s International Realty, Michael offers world-class marketing, powerful international exposure, and an elevated level of service built on trust, communication, and concierge-level attention.';
+
+    function isInsightArticle() {
+        return /\/Insights\//i.test(window.location.pathname);
+    }
 
     function buildFooterHtml() {
+        var insightContactHtml = isInsightArticle()
+            ? '<div class="s-footer__insight-contact"><p>' + INSIGHT_CONTACT + '</p></div>'
+            : '';
+
         return (
             '<div class="row s-footer__subscribe">' +
             '<div class="column lg-12">' +
@@ -43,6 +54,7 @@
             '</div>' +
             '</div>' +
             '</div>' +
+            insightContactHtml +
             '<div class="s-footer__legal">' +
             '<p class="s-footer__copyright">&copy; ' +
             new Date().getFullYear() +
