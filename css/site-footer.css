@@ -113,6 +113,14 @@
     color: rgba(255, 255, 255, 0.72);
 }
 
+.s-footer__version {
+    margin: 0.75rem 0 0;
+    font-size: 0.62rem;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.4);
+}
+
 /* ── IDX footer subscribe (email-only) ── */
 .s-footer__subscribe .idx-subscribe-wrap {
     display: flex;

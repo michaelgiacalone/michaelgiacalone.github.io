@@ -28,6 +28,7 @@
                 attempts += 1;
                 if (attempts > 120) {
                     console.error('[IDX] jQuery shim timed out loading jqwidx.js');
+                    ready();
                     return;
                 }
                 setTimeout(tick, 50);
@@ -42,6 +43,7 @@
             tag.onload = whenReady;
             tag.onerror = function () {
                 console.error('[IDX] Failed to load jqwidx.js from', JQ_SRC);
+                ready();
             };
             (document.head || document.documentElement).appendChild(tag);
             return;

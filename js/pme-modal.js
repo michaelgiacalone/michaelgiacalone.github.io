@@ -135,9 +135,86 @@
             return res.json().catch(function () {
                 return {};
             }).then(function (data) {
-                return { ok: res.ok, data: data };
+                return { ok: res.ok, status: res.status, data: data };
             });
         });
+    }
+
+    function ensureHiddenField(form, name, value) {
+        var input = form.querySelector('input[name="' + name + '"]');
+        if (!input) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            form.appendChild(input);
+        }
+        input.value = value;
+    }
+
+    function submitViaIframe(form, container) {
+        return new Promise(function (resolve) {
+            var iframe = document.getElementById('pmeIdxFrame');
+            var pending = false;
+
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = 'pmeIdxFrame';
+                iframe.name = 'pmeIdxFrame';
+                iframe.title = 'Evaluation request submission';
+                iframe.setAttribute('tabindex', '-1');
+                iframe.setAttribute('aria-hidden', 'true');
+                iframe.style.cssText =
+                    'position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none';
+                container.appendChild(iframe);
+
+                iframe.addEventListener('load', function () {
+                    if (!pending) return;
+                    pending = false;
+                    resolve({ ok: true, data: { success: true } });
+                });
+            } else {
+                iframe.addEventListener(
+                    'load',
+                    function onLoad() {
+                        if (!pending) return;
+                        pending = false;
+                        iframe.removeEventListener('load', onLoad);
+                        resolve({ ok: true, data: { success: true } });
+                    },
+                    { once: true }
+                );
+            }
+
+            ensureHiddenField(form, 'widgetid', String(IDX_WIDGET_ID));
+            ensureHiddenField(form, 'action', 'addLead');
+            ensureHiddenField(form, 'signupWidget', 'true');
+            ensureHiddenField(form, 'contactType', 'direct');
+            ensureHiddenField(form, 'contactRoutingAgent', '0');
+
+            pending = true;
+            form.setAttribute('action', 'https://keplersiguineau.idxbroker.com/idx/ajax/usersignup.php');
+            form.setAttribute('method', 'post');
+            form.setAttribute('target', 'pmeIdxFrame');
+            form.submit();
+        });
+    }
+
+    function shouldFallbackToIframe(result) {
+        if (!result) return true;
+        if (result.ok && result.data && result.data.success) return false;
+        return (
+            !result.ok &&
+            (result.status === 404 || result.status === 405 || result.status === 501)
+        );
+    }
+
+    function showLoadError(container) {
+        hideLoading();
+        if (container.querySelector('.pme-modal__error')) return;
+        container.insertAdjacentHTML(
+            'beforeend',
+            '<p class="pme-modal__error">Form could not load. Please close and try again.</p>'
+        );
     }
 
     function customizeForm() {
@@ -148,7 +225,12 @@
         if (!signup) return false;
 
         var form = signup.querySelector('form');
-        if (!form || form.dataset.pmeStyled === '1') return false;
+        if (!form) return false;
+
+        if (form.dataset.pmeStyled === '1') {
+            hideLoading();
+            return true;
+        }
 
         var firstName = form.querySelector('input[name="firstName"]');
         if (!firstName) return false;
@@ -226,6 +308,7 @@
                 return token;
             })
             .then(function (token) {
+                var container = getContainer();
                 return submitToIdx({
                     widgetId: IDX_WIDGET_ID,
                     firstName: firstName,
@@ -233,20 +316,49 @@
                     email: email,
                     phone: phone,
                     recaptchaToken: token
-                });
+                })
+                    .catch(function () {
+                        return null;
+                    })
+                    .then(function (result) {
+                        if (result && result.ok && result.data && result.data.success) {
+                            return result;
+                        }
+                        if (shouldFallbackToIframe(result) && container) {
+                            return submitViaIframe(form, container);
+                        }
+                        return result;
+                    });
             })
             .then(function (result) {
-                if (result.ok && result.data && result.data.success) {
+                if (result && result.ok && result.data && result.data.success) {
                     showThanks();
                     return;
                 }
                 showError(
-                    (result.data && (result.data.error || result.data.details)) ||
+                    (result && result.data && (result.data.error || result.data.details)) ||
                         'Unable to submit right now. Please try again.'
                 );
                 setSubmitBusy(form, false);
             })
             .catch(function () {
+                var container = getContainer();
+                if (container) {
+                    submitViaIframe(form, container)
+                        .then(function (result) {
+                            if (result.ok && result.data && result.data.success) {
+                                showThanks();
+                                return;
+                            }
+                            showError('Unable to submit right now. Please try again.');
+                            setSubmitBusy(form, false);
+                        })
+                        .catch(function () {
+                            showError('Unable to submit right now. Please try again.');
+                            setSubmitBusy(form, false);
+                        });
+                    return;
+                }
                 showError('Unable to submit right now. Please try again.');
                 setSubmitBusy(form, false);
             })
@@ -308,18 +420,9 @@
             return;
         }
 
-        if (container.querySelector('#idxwidgetsrc-42572')) {
-            watchWidget();
-            return;
-        }
-
         var ensure = window.ensureIdxBrokerJquery;
         if (!ensure) {
-            hideLoading();
-            container.insertAdjacentHTML(
-                'beforeend',
-                '<p class="pme-modal__error">Form could not load. Please refresh and try again.</p>'
-            );
+            showLoadError(container);
             return;
         }
 
@@ -327,18 +430,29 @@
 
         ensure(function () {
             widgetLoading = false;
-            if (container.querySelector('#idxwidgetsrc-42572')) {
-                watchWidget();
+
+            if (!(window.idx && window.idx.fn)) {
+                showLoadError(container);
                 return;
             }
 
-            var script = document.createElement('script');
-            script.charset = 'UTF-8';
-            script.type = 'text/javascript';
-            script.id = 'idxwidgetsrc-42572';
-            script.src = IDX_WIDGET_SRC;
-            container.appendChild(script);
+            if (!container.querySelector('#idxwidgetsrc-42572')) {
+                var script = document.createElement('script');
+                script.charset = 'UTF-8';
+                script.type = 'text/javascript';
+                script.id = 'idxwidgetsrc-42572';
+                script.src = IDX_WIDGET_SRC;
+                container.appendChild(script);
+            }
+
             watchWidget();
+
+            setTimeout(function () {
+                if (customizeForm()) return;
+                if (!container.querySelector('.LeadSignup form')) {
+                    showLoadError(container);
+                }
+            }, 12000);
         });
     }
 
@@ -360,9 +474,23 @@
         if (!modal) return;
 
         resetAfterSubmit();
+
+        var container = getContainer();
+        widgetLoading = false;
+        clearStatus();
+
+        if (container && !container.querySelector('.pme-modal__thanks')) {
+            if (!container.querySelector('.LeadSignup form')) {
+                container.innerHTML = '<p class="pme-modal__loading">Loading form…</p>';
+                if (idxObserver) {
+                    idxObserver.disconnect();
+                    idxObserver = null;
+                }
+            }
+        }
+
         loadWidget();
         watchWidget();
-        clearStatus();
 
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';

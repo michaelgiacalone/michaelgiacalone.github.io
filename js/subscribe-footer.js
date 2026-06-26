@@ -117,9 +117,77 @@
             return res.json().catch(function () {
                 return {};
             }).then(function (data) {
-                return { ok: res.ok, data: data };
+                return { ok: res.ok, status: res.status, data: data };
             });
         });
+    }
+
+    function ensureHiddenField(form, name, value) {
+        var input = form.querySelector('input[name="' + name + '"]');
+        if (!input) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            form.appendChild(input);
+        }
+        input.value = value;
+    }
+
+    function submitViaIframe(form, root) {
+        return new Promise(function (resolve) {
+            var iframe = document.getElementById('idxSubscribeFrame');
+            var pending = false;
+
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = 'idxSubscribeFrame';
+                iframe.name = 'idxSubscribeFrame';
+                iframe.title = 'Newsletter signup submission';
+                iframe.setAttribute('tabindex', '-1');
+                iframe.setAttribute('aria-hidden', 'true');
+                iframe.style.cssText =
+                    'position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none';
+                root.appendChild(iframe);
+
+                iframe.addEventListener('load', function () {
+                    if (!pending) return;
+                    pending = false;
+                    resolve({ ok: true, data: { success: true } });
+                });
+            } else {
+                iframe.addEventListener(
+                    'load',
+                    function onLoad() {
+                        if (!pending) return;
+                        pending = false;
+                        iframe.removeEventListener('load', onLoad);
+                        resolve({ ok: true, data: { success: true } });
+                    },
+                    { once: true }
+                );
+            }
+
+            ensureHiddenField(form, 'widgetid', String(IDX_WIDGET_ID));
+            ensureHiddenField(form, 'action', 'addLead');
+            ensureHiddenField(form, 'signupWidget', 'true');
+            ensureHiddenField(form, 'contactType', 'direct');
+            ensureHiddenField(form, 'contactRoutingAgent', '0');
+
+            pending = true;
+            form.setAttribute('action', 'https://keplersiguineau.idxbroker.com/idx/ajax/usersignup.php');
+            form.setAttribute('method', 'post');
+            form.setAttribute('target', 'idxSubscribeFrame');
+            form.submit();
+        });
+    }
+
+    function shouldFallbackToIframe(result) {
+        if (!result) return true;
+        if (result.ok && result.data && result.data.success) return false;
+        return (
+            !result.ok &&
+            (result.status === 404 || result.status === 405 || result.status === 501)
+        );
     }
 
     function handleFooterSubmit(form) {
@@ -155,21 +223,44 @@
                 return token;
             })
             .then(function (token) {
-                return submitToIdx(email, token);
+                return submitToIdx(email, token).catch(function () {
+                    return null;
+                });
             })
             .then(function (result) {
-                if (result.ok && result.data && result.data.success) {
+                if (result && result.ok && result.data && result.data.success) {
                     showThanks();
                     if (emailInput) emailInput.value = '';
                     return;
                 }
+                if (shouldFallbackToIframe(result)) {
+                    return submitViaIframe(form, getWidgetRoot()).then(function (iframeResult) {
+                        if (iframeResult.ok && iframeResult.data && iframeResult.data.success) {
+                            showThanks();
+                            if (emailInput) emailInput.value = '';
+                            return;
+                        }
+                        showError('Unable to subscribe right now. Please try again.');
+                    });
+                }
                 showError(
-                    (result.data && (result.data.error || result.data.details)) ||
+                    (result && result.data && (result.data.error || result.data.details)) ||
                         'Unable to subscribe right now. Please try again.'
                 );
             })
             .catch(function () {
-                showError('Unable to subscribe right now. Please try again.');
+                submitViaIframe(form, getWidgetRoot())
+                    .then(function (iframeResult) {
+                        if (iframeResult.ok && iframeResult.data && iframeResult.data.success) {
+                            showThanks();
+                            if (emailInput) emailInput.value = '';
+                            return;
+                        }
+                        showError('Unable to subscribe right now. Please try again.');
+                    })
+                    .catch(function () {
+                        showError('Unable to subscribe right now. Please try again.');
+                    });
             })
             .finally(function () {
                 form.dataset.idxSubmitting = '0';

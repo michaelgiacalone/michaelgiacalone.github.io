@@ -61,6 +61,7 @@
             '<p class="s-footer__disclaimer">' +
             DISCLAIMER +
             '</p>' +
+            '<p class="s-footer__version">Version 0.0.0.1</p>' +
             '</div>'
         );
     }
