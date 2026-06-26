@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Private Market Evaluation</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        body {
+            font-family: "BentonSans", "Segoe UI", system-ui, sans-serif;
+            background: transparent;
+        }
+        #pmeIdxWidget .LeadSignup,
+        #pmeIdxWidget form {
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            text-align: left !important;
+        }
+        #pmeIdxWidget #IDX-widgetLeadSignupHeaderWrapper {
+            display: none !important;
+        }
+        #pmeIdxWidget form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+        #pmeIdxWidget input[name="email"],
+        #pmeIdxWidget input[name="phone"],
+        #pmeIdxWidget input[type="submit"],
+        #pmeIdxWidget #IDX-widgetUserFeedback {
+            grid-column: 1 / -1;
+        }
+        #pmeIdxWidget input.IDX-LeadSignupInput {
+            width: 100% !important;
+            max-width: none !important;
+            box-sizing: border-box;
+            margin: 0 !important;
+            padding: 0.7rem 0.85rem;
+            border: 1px solid rgba(0, 35, 72, 0.18);
+            font-size: 0.95rem;
+        }
+        #pmeIdxWidget input[type="submit"] {
+            width: 100%;
+            margin: 0.15rem 0 0 !important;
+            padding: 0.8rem 1rem;
+            border: none;
+            background: #002348;
+            color: #fff;
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+        #pmeIdxWidget .IDX-widgetLabel {
+            display: none;
+        }
+        #pmeIdxWidget .pme-embed__loading {
+            color: #666;
+            margin: 0;
+        }
+        #pmeIdxWidget .pme-embed__thanks {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #111;
+        }
+        #pmeIdxWidget .pme-embed__error {
+            margin: 0;
+            color: #c0392b;
+        }
+    </style>
+    <script src="js/idx-broker-shim.js"></script>
+</head>
+<body>
+    <div id="pmeIdxWidget">
+        <p class="pme-embed__loading">Loading form…</p>
+    </div>
+    <script>
+    (function () {
+        'use strict';
+
+        var IDX_SRC =
+            'https://keplersiguineau.idxbroker.com/idx/leadsignupwidget.php?widgetid=42572';
+        var IDX_SIGNUP_URL =
+            'https://keplersiguineau.idxbroker.com/idx/ajax/usersignup.php';
+
+        var container = document.getElementById('pmeIdxWidget');
+        var observer = null;
+        var widgetLoaded = false;
+
+        function hideLoading() {
+            var el = container.querySelector('.pme-embed__loading');
+            if (el) el.remove();
+        }
+
+        function reportHeight() {
+            var height = Math.ceil(document.documentElement.scrollHeight);
+            try {
+                window.parent.postMessage({ type: 'pme-embed-height', height: height }, '*');
+            } catch (e) {}
+        }
+
+        function showThanks() {
+            container.innerHTML =
+                '<p class="pme-embed__thanks">Thank you! We\'ll be in touch shortly.</p>';
+            reportHeight();
+            try {
+                window.parent.postMessage({ type: 'pme-lead-thanks' }, '*');
+            } catch (e) {}
+        }
+
+        function showError(msg) {
+            hideLoading();
+            if (container.querySelector('.pme-embed__error')) return;
+            container.insertAdjacentHTML(
+                'beforeend',
+                '<p class="pme-embed__error">' + (msg || 'Form could not load.') + '</p>'
+            );
+        }
+
+        function setupForm(form) {
+            if (form.dataset.pmeEmbedBound === '1') return;
+            form.dataset.pmeEmbedBound = '1';
+            hideLoading();
+
+            var placeholders = {
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                email: 'Email Address',
+                phone: 'Phone Number'
+            };
+            Object.keys(placeholders).forEach(function (name) {
+                var input = form.querySelector('input[name="' + name + '"]');
+                if (input) input.setAttribute('placeholder', placeholders[name]);
+            });
+
+            var submit = form.querySelector('input[type="submit"]');
+            if (submit) submit.value = 'Request My Evaluation';
+
+            var frame = document.getElementById('pmeEmbedFrame');
+            if (!frame) {
+                frame = document.createElement('iframe');
+                frame.id = 'pmeEmbedFrame';
+                frame.name = 'pmeEmbedFrame';
+                frame.title = 'Evaluation request submission';
+                frame.setAttribute('tabindex', '-1');
+                frame.setAttribute('aria-hidden', 'true');
+                frame.style.cssText =
+                    'position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none';
+                document.body.appendChild(frame);
+            }
+
+            var pendingSubmit = false;
+
+            frame.addEventListener('load', function () {
+                if (!pendingSubmit) return;
+                pendingSubmit = false;
+                showThanks();
+                var btn = form.querySelector('input[type="submit"]');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.value = 'Request My Evaluation';
+                }
+            });
+
+            form.addEventListener('submit', function (e) {
+                if (e.defaultPrevented) return;
+
+                var tokenEl = form.querySelector('.IDX-widgetRecaptchaToken');
+                if (!tokenEl || !String(tokenEl.value || '').trim()) {
+                    e.preventDefault();
+                    return;
+                }
+
+                form.setAttribute('action', IDX_SIGNUP_URL);
+                form.setAttribute('method', 'post');
+                form.setAttribute('target', 'pmeEmbedFrame');
+
+                pendingSubmit = true;
+                var btn = form.querySelector('input[type="submit"]');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.value = 'Sending…';
+                }
+            });
+
+            reportHeight();
+            if (window.ResizeObserver) {
+                new ResizeObserver(reportHeight).observe(container);
+            } else {
+                window.addEventListener('resize', reportHeight);
+            }
+        }
+
+        function customizeForm() {
+            var signup = container.querySelector('.LeadSignup');
+            if (!signup) return false;
+            var form = signup.querySelector('form');
+            if (!form) return false;
+            setupForm(form);
+            return true;
+        }
+
+        function watchWidget() {
+            if (customizeForm()) return;
+            if (observer) return;
+            observer = new MutationObserver(function () {
+                if (customizeForm()) {
+                    observer.disconnect();
+                    observer = null;
+                }
+            });
+            observer.observe(container, { childList: true, subtree: true });
+        }
+
+        function loadWidget() {
+            if (widgetLoaded) {
+                watchWidget();
+                return;
+            }
+
+            var ensure = window.ensureIdxBrokerJquery;
+            if (!ensure) {
+                showError('IDX scripts failed to load.');
+                return;
+            }
+
+            widgetLoaded = true;
+            ensure(function () {
+                if (!(window.idx && window.idx.fn)) {
+                    showError('IDX scripts failed to load.');
+                    return;
+                }
+                if (!container.querySelector('#idxwidgetsrc-42572')) {
+                    var script = document.createElement('script');
+                    script.charset = 'UTF-8';
+                    script.type = 'text/javascript';
+                    script.id = 'idxwidgetsrc-42572';
+                    script.src = IDX_SRC;
+                    container.appendChild(script);
+                }
+                watchWidget();
+                setTimeout(function () {
+                    if (!customizeForm()) showError('Form timed out. Please refresh.');
+                }, 12000);
+            });
+        }
+
+        loadWidget();
+    })();
+    </script>
+</body>
+</html>

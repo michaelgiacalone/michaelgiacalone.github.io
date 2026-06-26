@@ -1,16 +1,9 @@
 /**
  * Private Market Evaluation modal — site-wide
- * IDX lead signup widget 42572, loaded inline when the modal opens.
+ * Loads IDX widget 42572 in an isolated iframe (avoids duplicate form IDs with footer widget).
  */
 (function () {
     'use strict';
-
-    var IDX_WIDGET_SRC =
-        'https://keplersiguineau.idxbroker.com/idx/leadsignupwidget.php?widgetid=42572';
-    var IDX_WIDGET_ID = 42572;
-    var RECAPTCHA_SITE_KEY = '6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij';
-    var RECAPTCHA_ACTION = 'widgetRegistration';
-    var SUBMIT_URL = '/.netlify/functions/idx-pme';
 
     var MODAL_HTML =
         '<div id="pmeModal" class="pme-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pmeModalTitle">' +
@@ -22,438 +15,44 @@
         '<div class="pme-modal__bar"></div>' +
         '<p class="pme-modal__body">Do you want a professional private market valuation from Naples\' most trusted luxury real estate team? Share your details below and we\'ll be in touch.</p>' +
         '<div class="pme-modal__widget" id="pmeIdxWidget">' +
-        '<p class="pme-modal__loading">Loading form…</p>' +
+        '<iframe id="pmeIdxEmbed" class="pme-modal__embed" title="Private market evaluation form" src="about:blank"></iframe>' +
         '</div>' +
-        '<div class="pme-modal__status" id="pme-modal-status" aria-live="polite"></div>' +
         '</div></div>';
 
-    var idxObserver = null;
-    var widgetLoading = false;
-
-    function getContainer() {
-        return document.getElementById('pmeIdxWidget');
-    }
-
-    function getStatusEl() {
-        return document.getElementById('pme-modal-status');
-    }
-
-    function hideLoading() {
-        var el = document.querySelector('#pmeIdxWidget > .pme-modal__loading');
-        if (el) el.remove();
-    }
-
-    function clearStatus() {
-        var status = getStatusEl();
-        if (!status) return;
-        status.textContent = '';
-        status.style.color = '';
-    }
-
-    function showError(message) {
-        var status = getStatusEl();
-        if (!status) return;
-        status.textContent = message || 'Something went wrong. Please try again.';
-        status.style.color = '#c0392b';
-    }
-
-    function resetAfterSubmit() {
-        var container = getContainer();
-        if (!container || !container.querySelector('.pme-modal__thanks')) return;
-
-        container.innerHTML = '<p class="pme-modal__loading">Loading form…</p>';
-        widgetLoading = false;
-        clearStatus();
-
-        if (idxObserver) {
-            idxObserver.disconnect();
-            idxObserver = null;
+    function getEmbedSrc() {
+        var path = window.location.pathname || '';
+        if (path.indexOf('/communities/') !== -1 || path.indexOf('/Insights/') !== -1) {
+            return '../pme-embed.html';
         }
+        return 'pme-embed.html';
     }
 
-    function ensureRecaptcha(done) {
-        if (window.grecaptcha && typeof window.grecaptcha.execute === 'function') {
-            done();
-            return;
-        }
-
-        var waited = 0;
-        var timer = setInterval(function () {
-            waited += 100;
-            if (window.grecaptcha && typeof window.grecaptcha.execute === 'function') {
-                clearInterval(timer);
-                done();
-                return;
-            }
-            if (waited >= 10000) {
-                clearInterval(timer);
-                done(new Error('reCAPTCHA did not load'));
-            }
-        }, 100);
+    function getEmbedFrame() {
+        return document.getElementById('pmeIdxEmbed');
     }
 
-    function fetchCaptchaToken(form) {
-        return new Promise(function (resolve, reject) {
-            var tokenEl = form.querySelector('.IDX-widgetRecaptchaToken');
-            if (!tokenEl) {
-                reject(new Error('Missing captcha field'));
-                return;
-            }
-
-            ensureRecaptcha(function (err) {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-
-                window.grecaptcha.ready(function () {
-                    window.grecaptcha
-                        .execute(RECAPTCHA_SITE_KEY, { action: RECAPTCHA_ACTION })
-                        .then(function (token) {
-                            tokenEl.value = token;
-                            resolve(token);
-                        })
-                        .catch(reject);
-                });
-            });
-        });
-    }
-
-    function setSubmitBusy(form, busy) {
-        var btn = form.querySelector('input[type="submit"]');
-        if (!btn) return;
-        btn.disabled = !!busy;
-        btn.value = busy ? 'Sending…' : 'Request My Evaluation';
-    }
-
-    function submitToIdx(payload) {
-        return fetch(SUBMIT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).then(function (res) {
-            return res.json().catch(function () {
-                return {};
-            }).then(function (data) {
-                return { ok: res.ok, status: res.status, data: data };
-            });
-        });
-    }
-
-    function ensureHiddenField(form, name, value) {
-        var input = form.querySelector('input[name="' + name + '"]');
-        if (!input) {
-            input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = name;
-            form.appendChild(input);
-        }
-        input.value = value;
-    }
-
-    function submitViaIframe(form, container) {
-        return new Promise(function (resolve) {
-            var iframe = document.getElementById('pmeIdxFrame');
-            var pending = false;
-
-            if (!iframe) {
-                iframe = document.createElement('iframe');
-                iframe.id = 'pmeIdxFrame';
-                iframe.name = 'pmeIdxFrame';
-                iframe.title = 'Evaluation request submission';
-                iframe.setAttribute('tabindex', '-1');
-                iframe.setAttribute('aria-hidden', 'true');
-                iframe.style.cssText =
-                    'position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none';
-                container.appendChild(iframe);
-
-                iframe.addEventListener('load', function () {
-                    if (!pending) return;
-                    pending = false;
-                    resolve({ ok: true, data: { success: true } });
-                });
-            } else {
-                iframe.addEventListener(
-                    'load',
-                    function onLoad() {
-                        if (!pending) return;
-                        pending = false;
-                        iframe.removeEventListener('load', onLoad);
-                        resolve({ ok: true, data: { success: true } });
-                    },
-                    { once: true }
-                );
-            }
-
-            ensureHiddenField(form, 'widgetid', String(IDX_WIDGET_ID));
-            ensureHiddenField(form, 'action', 'addLead');
-            ensureHiddenField(form, 'signupWidget', 'true');
-            ensureHiddenField(form, 'contactType', 'direct');
-            ensureHiddenField(form, 'contactRoutingAgent', '0');
-
-            pending = true;
-            form.setAttribute('action', 'https://keplersiguineau.idxbroker.com/idx/ajax/usersignup.php');
-            form.setAttribute('method', 'post');
-            form.setAttribute('target', 'pmeIdxFrame');
-            form.submit();
-        });
-    }
-
-    function shouldFallbackToIframe(result) {
-        if (!result) return true;
-        if (result.ok && result.data && result.data.success) return false;
-        return (
-            !result.ok &&
-            (result.status === 404 || result.status === 405 || result.status === 501)
-        );
-    }
-
-    function showLoadError(container) {
-        hideLoading();
-        if (container.querySelector('.pme-modal__error')) return;
-        container.insertAdjacentHTML(
-            'beforeend',
-            '<p class="pme-modal__error">Form could not load. Please close and try again.</p>'
-        );
-    }
-
-    function customizeForm() {
-        var container = getContainer();
-        if (!container) return false;
-
-        var signup = container.querySelector('.LeadSignup');
-        if (!signup) return false;
-
-        var form = signup.querySelector('form');
-        if (!form) return false;
-
-        if (form.dataset.pmeStyled === '1') {
-            hideLoading();
-            return true;
-        }
-
-        var firstName = form.querySelector('input[name="firstName"]');
-        if (!firstName) return false;
-
-        form.dataset.pmeStyled = '1';
-        form.id = 'idx-pme-lead-signup-form';
-        hideLoading();
-
-        var placeholders = {
-            firstName: 'First Name',
-            lastName: 'Last Name',
-            email: 'Email Address',
-            phone: 'Phone Number'
-        };
-
-        Object.keys(placeholders).forEach(function (name) {
-            var input = form.querySelector('input[name="' + name + '"]');
-            if (input) input.setAttribute('placeholder', placeholders[name]);
-        });
-
-        var submit = form.querySelector('input[type="submit"]');
-        if (submit) submit.value = 'Request My Evaluation';
-
-        var header = signup.querySelector('#IDX-widgetLeadSignupHeaderWrapper');
-        if (header) header.style.display = 'none';
-
-        signup.style.cssText =
-            'width:100%!important;padding:0!important;margin:0!important;border:none!important;' +
-            'box-shadow:none!important;background:transparent!important';
-
-        bindSubmit(form);
-        return true;
-    }
-
-    function showThanks() {
-        var container = getContainer();
-        if (!container) return;
-
-        container.innerHTML =
+    function showThanksInModal() {
+        var widget = document.getElementById('pmeIdxWidget');
+        if (!widget) return;
+        widget.innerHTML =
             '<p class="pme-modal__thanks">Thank you! We\'ll be in touch shortly.</p>';
     }
 
-    function handlePmeSubmit(form) {
-        if (form.dataset.pmeSubmitting === '1') return;
-        form.dataset.pmeSubmitting = '1';
-        clearStatus();
-
-        var firstName = cleanInput(form, 'firstName');
-        var lastName = cleanInput(form, 'lastName');
-        var email = cleanInput(form, 'email');
-        var phone = cleanInput(form, 'phone');
-
-        if (!firstName || !lastName) {
-            showError('Please enter your first and last name.');
-            form.dataset.pmeSubmitting = '0';
-            return;
-        }
-
-        if (!email) {
-            showError('Please enter your email address.');
-            form.dataset.pmeSubmitting = '0';
-            return;
-        }
-
-        setSubmitBusy(form, true);
-
-        var tokenEl = form.querySelector('.IDX-widgetRecaptchaToken');
-        var existingToken = tokenEl ? String(tokenEl.value || '').trim() : '';
-
-        Promise.resolve(existingToken || fetchCaptchaToken(form))
-            .then(function (token) {
-                if (!token) {
-                    return fetchCaptchaToken(form);
-                }
-                return token;
-            })
-            .then(function (token) {
-                var container = getContainer();
-                return submitToIdx({
-                    widgetId: IDX_WIDGET_ID,
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    phone: phone,
-                    recaptchaToken: token
-                })
-                    .catch(function () {
-                        return null;
-                    })
-                    .then(function (result) {
-                        if (result && result.ok && result.data && result.data.success) {
-                            return result;
-                        }
-                        if (shouldFallbackToIframe(result) && container) {
-                            return submitViaIframe(form, container);
-                        }
-                        return result;
-                    });
-            })
-            .then(function (result) {
-                if (result && result.ok && result.data && result.data.success) {
-                    showThanks();
-                    return;
-                }
-                showError(
-                    (result && result.data && (result.data.error || result.data.details)) ||
-                        'Unable to submit right now. Please try again.'
-                );
-                setSubmitBusy(form, false);
-            })
-            .catch(function () {
-                var container = getContainer();
-                if (container) {
-                    submitViaIframe(form, container)
-                        .then(function (result) {
-                            if (result.ok && result.data && result.data.success) {
-                                showThanks();
-                                return;
-                            }
-                            showError('Unable to submit right now. Please try again.');
-                            setSubmitBusy(form, false);
-                        })
-                        .catch(function () {
-                            showError('Unable to submit right now. Please try again.');
-                            setSubmitBusy(form, false);
-                        });
-                    return;
-                }
-                showError('Unable to submit right now. Please try again.');
-                setSubmitBusy(form, false);
-            })
-            .finally(function () {
-                form.dataset.pmeSubmitting = '0';
-            });
+    function resetEmbed() {
+        var widget = document.getElementById('pmeIdxWidget');
+        if (!widget) return;
+        widget.innerHTML =
+            '<iframe id="pmeIdxEmbed" class="pme-modal__embed" title="Private market evaluation form" src="about:blank"></iframe>';
     }
 
-    function cleanInput(form, name) {
-        var input = form.querySelector('input[name="' + name + '"]');
-        return input ? String(input.value || '').trim() : '';
-    }
-
-    function bindSubmit(form) {
-        if (form.dataset.pmeSubmitBound === '1') return;
-        form.dataset.pmeSubmitBound = '1';
-
-        form.querySelectorAll('input:not([type="hidden"])').forEach(function (input) {
-            input.addEventListener('focus', function () {
-                fetchCaptchaToken(form).catch(function () {});
-            });
-        });
-
-        form.addEventListener(
-            'submit',
-            function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                handlePmeSubmit(form);
-            },
-            true
-        );
-    }
-
-    function watchWidget() {
-        var container = getContainer();
-        if (!container) return;
-
-        if (customizeForm()) return;
-
-        if (idxObserver) return;
-
-        idxObserver = new MutationObserver(function () {
-            if (customizeForm()) {
-                idxObserver.disconnect();
-                idxObserver = null;
-            }
-        });
-
-        idxObserver.observe(container, { childList: true, subtree: true });
-    }
-
-    function loadWidget() {
-        var container = getContainer();
-        if (!container || widgetLoading) return;
-
-        if (container.querySelector('.LeadSignup form')) {
-            watchWidget();
-            return;
+    function loadEmbed() {
+        var frame = getEmbedFrame();
+        if (!frame) return;
+        var src = getEmbedSrc();
+        if (frame.getAttribute('data-loaded-src') !== src) {
+            frame.src = src;
+            frame.setAttribute('data-loaded-src', src);
         }
-
-        var ensure = window.ensureIdxBrokerJquery;
-        if (!ensure) {
-            showLoadError(container);
-            return;
-        }
-
-        widgetLoading = true;
-
-        ensure(function () {
-            widgetLoading = false;
-
-            if (!(window.idx && window.idx.fn)) {
-                showLoadError(container);
-                return;
-            }
-
-            if (!container.querySelector('#idxwidgetsrc-42572')) {
-                var script = document.createElement('script');
-                script.charset = 'UTF-8';
-                script.type = 'text/javascript';
-                script.id = 'idxwidgetsrc-42572';
-                script.src = IDX_WIDGET_SRC;
-                container.appendChild(script);
-            }
-
-            watchWidget();
-
-            setTimeout(function () {
-                if (customizeForm()) return;
-                if (!container.querySelector('.LeadSignup form')) {
-                    showLoadError(container);
-                }
-            }, 12000);
-        });
     }
 
     function isPmeLink(el) {
@@ -473,24 +72,8 @@
         var modal = ensureModal();
         if (!modal) return;
 
-        resetAfterSubmit();
-
-        var container = getContainer();
-        widgetLoading = false;
-        clearStatus();
-
-        if (container && !container.querySelector('.pme-modal__thanks')) {
-            if (!container.querySelector('.LeadSignup form')) {
-                container.innerHTML = '<p class="pme-modal__loading">Loading form…</p>';
-                if (idxObserver) {
-                    idxObserver.disconnect();
-                    idxObserver = null;
-                }
-            }
-        }
-
-        loadWidget();
-        watchWidget();
+        resetEmbed();
+        loadEmbed();
 
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
@@ -518,6 +101,22 @@
 
     function init() {
         bindModal(ensureModal());
+
+        window.addEventListener('message', function (e) {
+            if (!e.data) return;
+
+            if (e.data.type === 'pme-embed-height') {
+                var frame = getEmbedFrame();
+                if (frame && e.data.height) {
+                    frame.style.height = Math.max(120, e.data.height) + 'px';
+                }
+                return;
+            }
+
+            if (e.data.type === 'pme-lead-thanks') {
+                showThanksInModal();
+            }
+        });
 
         document.addEventListener('click', function (e) {
             var link = e.target.closest('a');

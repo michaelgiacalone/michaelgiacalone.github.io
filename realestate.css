@@ -600,7 +600,7 @@ body.page-new-home .why-work-with-us__inner {
     background: #fff;
     max-width: 500px;
     width: 100%;
-    padding: 3rem 2.25rem 2.25rem;
+    padding: 2.25rem 2rem 1.75rem;
     box-sizing: border-box;
     z-index: 1;
     transform: translateY(16px);
@@ -608,8 +608,8 @@ body.page-new-home .why-work-with-us__inner {
     text-align: center;
     border-radius: 6px;
     box-shadow: 0 20px 50px rgba(0, 35, 72, 0.22);
-    max-height: calc(100vh - 2.5rem);
-    overflow-y: auto;
+    max-height: calc(100vh - 2rem);
+    overflow: visible;
 }
 .pme-modal[aria-hidden="false"] .pme-modal__box {
     transform: translateY(0);
@@ -662,14 +662,25 @@ body.page-new-home .why-work-with-us__inner {
     border-radius: 2px;
 }
 .pme-modal__body {
-    font-size: 1.2rem;
-    line-height: 1.7;
+    font-size: 1.05rem;
+    line-height: 1.55;
     color: #444;
-    margin: 0 0 1.5rem;
+    margin: 0 0 1rem;
 }
 .pme-modal__widget {
     text-align: left;
     min-height: 0;
+    overflow: visible;
+}
+
+.pme-modal__embed {
+    display: block;
+    width: 100%;
+    height: 17rem;
+    min-height: 0;
+    border: 0;
+    background: transparent;
+    overflow: hidden;
 }
 
 .pme-modal__loading {
@@ -890,11 +901,46 @@ body.page-new-home .why-work-with-us__inner {
     margin: 0.5rem 0 0;
     min-height: 1.25rem;
 }
+@media screen and (max-height: 720px) {
+    .pme-modal {
+        align-items: flex-start;
+        padding-top: 0.5rem;
+    }
+    .pme-modal__box {
+        padding-top: 1.75rem;
+        padding-bottom: 1rem;
+    }
+    .pme-modal h2.pme-modal__title {
+        font-size: 1.35rem;
+        margin-bottom: 0.5rem;
+    }
+    .pme-modal__bar {
+        margin-bottom: 0.6rem;
+    }
+    .pme-modal__body {
+        font-size: 0.92rem;
+        line-height: 1.4;
+        margin-bottom: 0.65rem;
+    }
+}
 @media screen and (max-width: 600px) {
-    .pme-modal { padding: 1rem; }
-    .pme-modal__box { padding: 2.5rem 1.5rem 1.75rem; }
-    .pme-modal h2.pme-modal__title { font-size: 1.55rem; }
-    .pme-modal__body { font-size: 1.12rem; }
+    .pme-modal {
+        padding: 0.75rem;
+        align-items: flex-start;
+        overflow-y: auto;
+    }
+    .pme-modal__box { padding: 2rem 1.25rem 1.25rem; }
+    .pme-modal h2.pme-modal__title {
+        font-size: 1.4rem;
+        margin-bottom: 0.65rem;
+    }
+    .pme-modal__bar { margin-bottom: 0.75rem; }
+    .pme-modal__body {
+        font-size: 0.95rem;
+        line-height: 1.45;
+        margin-bottom: 0.75rem;
+    }
+    .pme-modal__eyebrow { margin-bottom: 0.5rem; }
     .pme-modal #IDX-widgetLeadSignupForm .IDX-LeadSignupInput,
     .pme-modal #IDX-widgetLeadSignupForm input[type="text"],
     .pme-modal #IDX-widgetLeadSignupForm input[type="email"],

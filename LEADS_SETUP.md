@@ -1,31 +1,19 @@
 # Leads Setup (IDX Broker)
 
-Newsletter signups and private market evaluation requests are sent to **IDX Broker** via Netlify functions. Each form uses its own IDX widget ID:
+Footer subscribe and the Private Market Evaluation modal submit **directly to IDX** in the browser. No backend server is required — this works on GitHub Pages, Netlify, or any static host.
 
-| Widget ID | Form | Netlify function |
-|-----------|------|------------------|
-| **42573** | Footer email opt-in (“Looking to buy or sell?”) | `/.netlify/functions/idx-subscribe` |
-| **42572** | Private Market Evaluation modal | `/.netlify/functions/idx-pme` |
+| Widget ID | Form |
+|-----------|------|
+| **42573** | Footer email opt-in (“Looking to buy or sell?”) |
+| **42572** | Request A Private Market Evaluation modal (`pme-embed.html` in iframe) |
 
-Both functions POST to IDX `usersignup.php` with `widgetid` set to the matching ID above, plus a Google reCAPTCHA token from the browser.
+Leads appear in your IDX Broker dashboard under **Leads → Manage**.
 
-## Deploy
+## Testing
 
-1. Push/deploy to Netlify (functions live in `netlify/functions/`).
-2. Test on the **live site URL** — `python3 -m http.server` cannot run Netlify functions.
-3. Footer subscribe: scroll to footer, use a **new email**, confirm lead in IDX dashboard.
-4. PME modal: open **Request A Private Market Evaluation**, submit with real details, confirm lead in IDX.
+1. Hard refresh the site (`Cmd+Shift+R`).
+2. **Footer** — scroll down, enter a **new email**, click Subscribe.
+3. **PME modal** — open “Request A Private Market Evaluation”, fill out the form, submit.
+4. Confirm both leads show up in IDX.
 
-## Local development
-
-Use Netlify CLI for full lead testing:
-
-```bash
-npx netlify-cli dev
-```
-
-Then open the URL it prints (usually `http://localhost:8888`).
-
-## Internal editor tools
-
-`insightsCreator.html` and `instructions.html` are redirected away on the public Netlify site. Use them locally with `python3 -m http.server` for article publishing only.
+Use a fresh email each test — IDX will not create a duplicate for an address already on file.

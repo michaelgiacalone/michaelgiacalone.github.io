@@ -1,16 +1,14 @@
 /**
  * Footer email opt-in — IDX lead signup widget (42573)
- * Email-only UI; submits to IDX via Netlify function with reCAPTCHA verification.
+ * Cooperates with IDX's native validation + reCAPTCHA; posts via hidden iframe.
  */
 (function () {
     'use strict';
 
+    var IDX_SIGNUP_URL =
+        'https://keplersiguineau.idxbroker.com/idx/ajax/usersignup.php';
     var IDX_SRC =
         'https://keplersiguineau.idxbroker.com/idx/leadsignupwidget.php?widgetid=42573';
-    var IDX_WIDGET_ID = 42573;
-    var RECAPTCHA_SITE_KEY = '6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij';
-    var RECAPTCHA_ACTION = 'widgetRegistration';
-    var SUBMIT_URL = '/.netlify/functions/idx-subscribe';
 
     var widgetLoaded = false;
     var observer = null;
@@ -49,54 +47,6 @@
         status.style.color = '';
     }
 
-    function ensureRecaptcha(done) {
-        if (window.grecaptcha && typeof window.grecaptcha.execute === 'function') {
-            done();
-            return;
-        }
-
-        var waited = 0;
-        var timer = setInterval(function () {
-            waited += 100;
-            if (window.grecaptcha && typeof window.grecaptcha.execute === 'function') {
-                clearInterval(timer);
-                done();
-                return;
-            }
-            if (waited >= 10000) {
-                clearInterval(timer);
-                done(new Error('reCAPTCHA did not load'));
-            }
-        }, 100);
-    }
-
-    function fetchCaptchaToken(form) {
-        return new Promise(function (resolve, reject) {
-            var tokenEl = form.querySelector('.IDX-widgetRecaptchaToken');
-            if (!tokenEl) {
-                reject(new Error('Missing captcha field'));
-                return;
-            }
-
-            ensureRecaptcha(function (err) {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-
-                window.grecaptcha.ready(function () {
-                    window.grecaptcha
-                        .execute(RECAPTCHA_SITE_KEY, { action: RECAPTCHA_ACTION })
-                        .then(function (token) {
-                            tokenEl.value = token;
-                            resolve(token);
-                        })
-                        .catch(reject);
-                });
-            });
-        });
-    }
-
     function setSubmitBusy(form, busy) {
         var btn = form.querySelector('input[type="submit"]');
         if (!btn) return;
@@ -104,192 +54,69 @@
         btn.value = busy ? 'Sending…' : 'Subscribe';
     }
 
-    function submitToIdx(email, recaptchaToken) {
-        return fetch(SUBMIT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email: email,
-                recaptchaToken: recaptchaToken,
-                widgetId: IDX_WIDGET_ID
-            })
-        }).then(function (res) {
-            return res.json().catch(function () {
-                return {};
-            }).then(function (data) {
-                return { ok: res.ok, status: res.status, data: data };
-            });
-        });
-    }
-
-    function ensureHiddenField(form, name, value) {
-        var input = form.querySelector('input[name="' + name + '"]');
-        if (!input) {
-            input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = name;
-            form.appendChild(input);
-        }
-        input.value = value;
-    }
-
-    function submitViaIframe(form, root) {
-        return new Promise(function (resolve) {
-            var iframe = document.getElementById('idxSubscribeFrame');
-            var pending = false;
-
-            if (!iframe) {
-                iframe = document.createElement('iframe');
-                iframe.id = 'idxSubscribeFrame';
-                iframe.name = 'idxSubscribeFrame';
-                iframe.title = 'Newsletter signup submission';
-                iframe.setAttribute('tabindex', '-1');
-                iframe.setAttribute('aria-hidden', 'true');
-                iframe.style.cssText =
-                    'position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none';
-                root.appendChild(iframe);
-
-                iframe.addEventListener('load', function () {
-                    if (!pending) return;
-                    pending = false;
-                    resolve({ ok: true, data: { success: true } });
-                });
-            } else {
-                iframe.addEventListener(
-                    'load',
-                    function onLoad() {
-                        if (!pending) return;
-                        pending = false;
-                        iframe.removeEventListener('load', onLoad);
-                        resolve({ ok: true, data: { success: true } });
-                    },
-                    { once: true }
-                );
-            }
-
-            ensureHiddenField(form, 'widgetid', String(IDX_WIDGET_ID));
-            ensureHiddenField(form, 'action', 'addLead');
-            ensureHiddenField(form, 'signupWidget', 'true');
-            ensureHiddenField(form, 'contactType', 'direct');
-            ensureHiddenField(form, 'contactRoutingAgent', '0');
-
-            pending = true;
-            form.setAttribute('action', 'https://keplersiguineau.idxbroker.com/idx/ajax/usersignup.php');
-            form.setAttribute('method', 'post');
-            form.setAttribute('target', 'idxSubscribeFrame');
-            form.submit();
-        });
-    }
-
-    function shouldFallbackToIframe(result) {
-        if (!result) return true;
-        if (result.ok && result.data && result.data.success) return false;
-        return (
-            !result.ok &&
-            (result.status === 404 || result.status === 405 || result.status === 501)
-        );
-    }
-
-    function handleFooterSubmit(form) {
-        if (form.dataset.idxSubmitting === '1') return;
-        form.dataset.idxSubmitting = '1';
-
-        clearStatus();
-
-        var emailInput = form.querySelector('input[name="email"]');
-        var email = emailInput ? String(emailInput.value || '').trim() : '';
-
-        if (!email) {
-            showError('Please enter your email address.');
-            form.dataset.idxSubmitting = '0';
-            return;
-        }
-
+    function prepareFormForIdx(form) {
         var firstName = form.querySelector('input[name="firstName"]');
         var lastName = form.querySelector('input[name="lastName"]');
         if (firstName) firstName.value = 'Newsletter';
         if (lastName) lastName.value = 'Subscriber';
 
-        setSubmitBusy(form, true);
-
-        var tokenEl = form.querySelector('.IDX-widgetRecaptchaToken');
-        var existingToken = tokenEl ? String(tokenEl.value || '').trim() : '';
-
-        Promise.resolve(existingToken || fetchCaptchaToken(form))
-            .then(function (token) {
-                if (!token) {
-                    return fetchCaptchaToken(form);
-                }
-                return token;
-            })
-            .then(function (token) {
-                return submitToIdx(email, token).catch(function () {
-                    return null;
-                });
-            })
-            .then(function (result) {
-                if (result && result.ok && result.data && result.data.success) {
-                    showThanks();
-                    if (emailInput) emailInput.value = '';
-                    return;
-                }
-                if (shouldFallbackToIframe(result)) {
-                    return submitViaIframe(form, getWidgetRoot()).then(function (iframeResult) {
-                        if (iframeResult.ok && iframeResult.data && iframeResult.data.success) {
-                            showThanks();
-                            if (emailInput) emailInput.value = '';
-                            return;
-                        }
-                        showError('Unable to subscribe right now. Please try again.');
-                    });
-                }
-                showError(
-                    (result && result.data && (result.data.error || result.data.details)) ||
-                        'Unable to subscribe right now. Please try again.'
-                );
-            })
-            .catch(function () {
-                submitViaIframe(form, getWidgetRoot())
-                    .then(function (iframeResult) {
-                        if (iframeResult.ok && iframeResult.data && iframeResult.data.success) {
-                            showThanks();
-                            if (emailInput) emailInput.value = '';
-                            return;
-                        }
-                        showError('Unable to subscribe right now. Please try again.');
-                    })
-                    .catch(function () {
-                        showError('Unable to subscribe right now. Please try again.');
-                    });
-            })
-            .finally(function () {
-                form.dataset.idxSubmitting = '0';
-                setSubmitBusy(form, false);
-            });
+        form.setAttribute('action', IDX_SIGNUP_URL);
+        form.setAttribute('method', 'post');
+        form.setAttribute('target', 'idxSubscribeFrame');
     }
 
-    function bindFooterSubmit(form) {
+    function setupIframeSubmit(form, root) {
         if (form.dataset.idxSubscribeBound === '1') return;
         form.dataset.idxSubscribeBound = '1';
 
-        form.id = 'idx-footer-lead-signup-form';
-
-        var email = form.querySelector('input[name="email"]');
-        if (email) {
-            email.addEventListener('focus', function () {
-                fetchCaptchaToken(form).catch(function () {});
-            });
+        var iframe = document.getElementById('idxSubscribeFrame');
+        if (!iframe) {
+            iframe = document.createElement('iframe');
+            iframe.id = 'idxSubscribeFrame';
+            iframe.name = 'idxSubscribeFrame';
+            iframe.title = 'Newsletter signup submission';
+            iframe.setAttribute('tabindex', '-1');
+            iframe.setAttribute('aria-hidden', 'true');
+            iframe.style.cssText =
+                'position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none';
+            root.appendChild(iframe);
         }
 
-        form.addEventListener(
-            'submit',
-            function (e) {
+        var pendingSubmit = false;
+
+        iframe.addEventListener('load', function () {
+            if (!pendingSubmit) return;
+            pendingSubmit = false;
+            showThanks();
+            var email = form.querySelector('input[name="email"]');
+            if (email) email.value = '';
+            setSubmitBusy(form, false);
+        });
+
+        form.addEventListener('submit', function (e) {
+            if (e.defaultPrevented) return;
+
+            clearStatus();
+
+            var emailInput = form.querySelector('input[name="email"]');
+            var emailVal = emailInput ? String(emailInput.value || '').trim() : '';
+            if (!emailVal) {
                 e.preventDefault();
-                e.stopPropagation();
-                handleFooterSubmit(form);
-            },
-            true
-        );
+                showError('Please enter your email address.');
+                return;
+            }
+
+            var tokenEl = form.querySelector('.IDX-widgetRecaptchaToken');
+            if (!tokenEl || !String(tokenEl.value || '').trim()) {
+                e.preventDefault();
+                showError('Please click the email field, then try again.');
+                return;
+            }
+
+            prepareFormForIdx(form);
+            pendingSubmit = true;
+            setSubmitBusy(form, true);
+        });
     }
 
     function customizeFooterIdx() {
@@ -345,7 +172,7 @@
             submit.removeAttribute('style');
         }
 
-        bindFooterSubmit(form);
+        setupIframeSubmit(form, root);
         return true;
     }
 
@@ -427,24 +254,7 @@
             return;
         }
 
-        var section = root.closest('.s-footer__subscribe') || root;
-        if (!('IntersectionObserver' in window)) {
-            initIdxSubscribeFooter();
-            return;
-        }
-
-        var seen = false;
-        var io = new IntersectionObserver(
-            function (entries) {
-                if (seen) return;
-                if (!entries.some(function (e) { return e.isIntersecting; })) return;
-                seen = true;
-                io.disconnect();
-                initIdxSubscribeFooter();
-            },
-            { rootMargin: '120px' }
-        );
-        io.observe(section);
+        initIdxSubscribeFooter();
     }
 
     if (document.readyState === 'loading') {

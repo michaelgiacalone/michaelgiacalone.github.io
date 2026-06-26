@@ -3,51 +3,6 @@
  *
  * ------------------------------------------------------------------- */
 
-/* Static servers (e.g. python -m http.server) cannot run Netlify Functions and
- * may return 501/404/405 for POST to /.netlify/functions/*.
- * Only on LOCAL dev we fake a success JSON so forms do not throw.
- * On the real Netlify host, never fake — you must see real status codes and errors. */
-(function () {
-    var origFetch = window.fetch;
-    if (!origFetch) return;
-    function fnPath(u) {
-        if (typeof u === 'string') return u;
-        if (u && typeof u.url === 'string') return u.url;
-        return '';
-    }
-    function isLocalDev() {
-        var h = window.location.hostname;
-        return h === 'localhost' || h === '127.0.0.1' || h === '[::1]' || h === '';
-    }
-    function isNetlifyFunctionUrl(p) {
-        return typeof p === 'string' && p.indexOf('/.netlify/functions/') !== -1;
-    }
-    window.fetch = function (url, init) {
-        return origFetch.call(this, url, init || {}).then(function (res) {
-            var p = fnPath(url);
-            if (!isNetlifyFunctionUrl(p) || res.ok) return res;
-            /* Previously this ran on production too: relative URLs match, so real 405/500
-             * could be hidden behind a fake { success: true }. Only stub on localhost/file. */
-            if (
-                isLocalDev() &&
-                (res.status === 501 || res.status === 404 || res.status === 405)
-            ) {
-                if (typeof console !== 'undefined' && console.info) {
-                    console.info('[forms] Netlify function unavailable (local static server). Use netlify dev or deploy for live POST.');
-                }
-                return {
-                    ok: true,
-                    status: 200,
-                    json: function () {
-                        return Promise.resolve({ success: true, localPreview: true });
-                    }
-                };
-            }
-            return res;
-        });
-    };
-})();
-
 (function(html) {
 
     'use strict';
