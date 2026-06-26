@@ -30,11 +30,10 @@
             '<div class="column lg-12">' +
             '<h2>Looking to buy or sell?</h2>' +
             '<p>Let us know how we can help you.</p>' +
-            '<form id="mc-form" class="mc-form">' +
-            '<input type="email" name="EMAIL" id="mce-EMAIL" class="u-fullwidth text-center" placeholder="Your Email Address" required>' +
-            '<input type="submit" name="subscribe" value="Subscribe" class="btn--small btn--primary u-fullwidth">' +
-            '<div class="mc-status"></div>' +
-            '</form>' +
+            '<div class="idx-subscribe-wrap mc-form">' +
+            '<div id="idxSubscribeWidget" class="idx-subscribe-widget"></div>' +
+            '<div class="mc-status" id="idx-subscribe-status" aria-live="polite"></div>' +
+            '</div>' +
             '</div>' +
             '</div>' +
             '<div class="s-footer__premier-bar">' +
@@ -72,6 +71,11 @@
         footer.className = 's-footer s-footer--premier';
         footer.setAttribute('data-premier-footer', '3');
         footer.innerHTML = buildFooterHtml();
+        if (typeof window.bootIdxSubscribeFooter === 'function') {
+            window.bootIdxSubscribeFooter();
+        } else if (typeof window.initIdxSubscribeFooter === 'function') {
+            window.initIdxSubscribeFooter();
+        }
     }
 
     if (document.readyState === 'loading') {

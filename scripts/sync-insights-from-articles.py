@@ -250,11 +250,10 @@ def footer_block() -> str:
                 <div class="column lg-12">
                     <h2>Looking to buy or sell?</h2>
                     <p>Let us know how we can help you.</p>
-                    <form id="mc-form" class="mc-form">
-                        <input type="email" name="EMAIL" id="mce-EMAIL" class="u-fullwidth text-center" placeholder="Your Email Address" required>
-                        <input type="submit" name="subscribe" value="Subscribe" class="btn--small btn--primary u-fullwidth">
-                        <div class="mc-status"></div>
-                    </form>
+                    <div class="idx-subscribe-wrap mc-form">
+                        <div id="idxSubscribeWidget" class="idx-subscribe-widget"></div>
+                        <div class="mc-status" id="idx-subscribe-status" aria-live="polite"></div>
+                    </div>
                 </div>
             </div>
             <div class="row s-footer__main">
@@ -292,7 +291,7 @@ def footer_block() -> str:
 
 def author_block() -> str:
     return """<div class="post-author">
-                    <img src="../assets/test_michael.jpg" alt="Michael Giacalone">
+                    <img src="../assets/michael.jpg" alt="Michael Giacalone">
                     <div>
                         <p class="post-author__name">Michael Giacalone</p>
                         <p class="post-author__title">Global Real Estate Advisor · Premier Sotheby's International Realty · Naples, FL</p>
@@ -366,6 +365,7 @@ def build_insight_page(article: dict) -> str:
     <script src="../js/plugins.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/site-footer.js"></script>
+    <script src="../js/idx-broker-shim.js"></script>
     <script src="../js/subscribe-footer.js"></script>
     <script src="../js/pme-modal.js"></script>
 </body>

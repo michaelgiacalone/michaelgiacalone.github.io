@@ -1,54 +1,31 @@
-# Leads Setup (Netlify + Resend)
+# Leads Setup (IDX Broker)
 
-This project posts newsletter signups to `/.netlify/functions/subscribe` and private market evaluation requests to `/.netlify/functions/pme`.
-Use these steps when you move the code to another person's computer/Netlify account.
+Newsletter signups and private market evaluation requests are sent to **IDX Broker** via Netlify functions. Each form uses its own IDX widget ID:
 
-## 1) Create Resend
+| Widget ID | Form | Netlify function |
+|-----------|------|------------------|
+| **42573** | Footer email opt-in (“Looking to buy or sell?”) | `/.netlify/functions/idx-subscribe` |
+| **42572** | Private Market Evaluation modal | `/.netlify/functions/idx-pme` |
 
-- Create a Resend account.
-- Verify a sending domain.
-- Create an API key.
+Both functions POST to IDX `usersignup.php` with `widgetid` set to the matching ID above, plus a Google reCAPTCHA token from the browser.
 
-## 2) Set Netlify Environment Variables
+## Deploy
 
-In Netlify site settings, add:
+1. Push/deploy to Netlify (functions live in `netlify/functions/`).
+2. Test on the **live site URL** — `python3 -m http.server` cannot run Netlify functions.
+3. Footer subscribe: scroll to footer, use a **new email**, confirm lead in IDX dashboard.
+4. PME modal: open **Request A Private Market Evaluation**, submit with real details, confirm lead in IDX.
 
-- `RESEND_API_KEY` - your Resend API key
-- `RESEND_FROM` - sender email (for example `Leads <leads@yourdomain.com>`)
-- `RESEND_TO` - fallback recipient email
-- `DEFAULT_FIRM` - default firm label for subject/body (example: `ARG Naples`)
+## Local development
 
-Optional (for multiple firms with one codebase):
+Use Netlify CLI for full lead testing:
 
-- `FIRM_TO_EMAIL_JSON` - JSON map for firm-specific routing.
-
-Example:
-
-```json
-{
-  "ARG Naples": "team-a@example.com",
-  "Another Firm": "team-b@example.com"
-}
+```bash
+npx netlify-cli dev
 ```
 
-If a submitted `firm` value matches this map, the function sends to that address.
-If not, it falls back to `RESEND_TO`.
+Then open the URL it prints (usually `http://localhost:8888`).
 
-## 3) Deploy
+## Internal editor tools
 
-- Push/deploy to Netlify.
-- Submit the footer subscribe form on any page.
-- Test **Request A Private Market Evaluation** (nav link or `addCta` button on an Insights article) — form posts to `/.netlify/functions/pme` using the same `RESEND_*` variables.
-
-## 4) What gets captured now
-
-Each signup email includes:
-
-- subscriber email
-- firm label (from payload, or `DEFAULT_FIRM`, or host fallback)
-- source page URL
-- request host
-
-**PME requests** capture name, email, phone, and property address (optional) and email them to `RESEND_TO`.
-
-No paid CRM is required to start. This is the quickest low-cost capture flow.
+`insightsCreator.html` and `instructions.html` are redirected away on the public Netlify site. Use them locally with `python3 -m http.server` for article publishing only.

@@ -2360,6 +2360,7 @@ button.btn--large {
 .mc-form .btn--primary:hover {
     background: #001a35 !important;
     border-color: #001a35 !important;
+    color: #fff !important;
 }
 
 .btn--stroke,

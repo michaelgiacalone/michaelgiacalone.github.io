@@ -18,3 +18,19 @@
   from = "/blogPost.html"
   to = "/Insights/insight-record-breaking-62m-naples-sale-paul-arpin-202608.html"
   status = 301
+
+# Internal editor tools — not for public site
+[[redirects]]
+  from = "/insightsCreator.html"
+  to = "/"
+  status = 302
+
+[[redirects]]
+  from = "/instructions.html"
+  to = "/"
+  status = 302
+
+[[redirects]]
+  from = "/articles/*"
+  to = "/"
+  status = 302

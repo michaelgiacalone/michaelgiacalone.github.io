@@ -100,17 +100,170 @@
 
 .s-footer__copyright {
     margin: 0 0 1rem;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     letter-spacing: 0.03em;
-    color: rgba(255, 255, 255, 0.78);
+    color: rgba(255, 255, 255, 0.88);
 }
 
 .s-footer__disclaimer {
     margin: 0 auto;
     max-width: 960px;
-    font-size: 0.82rem;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.52);
+    font-size: 0.98rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+/* ── IDX footer subscribe (email-only) ── */
+.s-footer__subscribe .idx-subscribe-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: var(--vspace-1_5);
+}
+
+.s-footer__subscribe .idx-subscribe-widget {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+}
+
+.s-footer__subscribe .idx-subscribe-widget .LeadSignup {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    background: transparent !important;
+    text-align: left !important;
+}
+
+.s-footer__subscribe .idx-subscribe-widget #IDX-widgetLeadSignupHeaderWrapper {
+    display: none !important;
+}
+
+.s-footer__subscribe .idx-subscribe-widget form {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+}
+
+.s-footer__subscribe .idx-subscribe-widget .IDX-widgetLabel {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.s-footer__subscribe .idx-subscribe-widget input[name="email"] {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    max-width: none !important;
+    display: block !important;
+    margin: 0 0 var(--vspace-0_5) 0 !important;
+    background-color: white !important;
+    font-size: calc(var(--text-size) * 0.8889) !important;
+    border: 1px solid var(--color-gray-5) !important;
+    border-radius: var(--border-radius) 0 0 var(--border-radius) !important;
+    padding: var(--input-vpadding) 2rem var(--input-vpadding) 2.4rem !important;
+    text-align: left !important;
+    box-shadow: none !important;
+    color: #111 !important;
+    box-sizing: border-box !important;
+    min-height: 3.35rem !important;
+    font-family: inherit !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+.s-footer__subscribe .idx-subscribe-widget input[name="email"]::placeholder {
+    color: #8a94a0 !important;
+    opacity: 1 !important;
+}
+
+.s-footer__subscribe .idx-subscribe-widget input[name="email"]:focus {
+    border-color: #002348 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(0, 35, 72, 0.1) !important;
+}
+
+.s-footer__subscribe .idx-subscribe-widget input[type="submit"] {
+    flex: 0 0 240px !important;
+    width: 240px !important;
+    max-width: 240px !important;
+    margin: 0 0 var(--vspace-0_5) 0 !important;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0 !important;
+    background: #002348 !important;
+    border: 1px solid #002348 !important;
+    color: #fff !important;
+    font-size: calc(var(--text-size) * 0.8889) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
+    min-height: 3.35rem !important;
+    padding: var(--input-vpadding) 1.35rem !important;
+    box-sizing: border-box !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+.s-footer__subscribe .idx-subscribe-widget input[type="submit"]:hover,
+.s-footer__subscribe .idx-subscribe-widget input[type="submit"]:focus,
+.s-footer__subscribe .idx-subscribe-widget input[type="submit"]:active {
+    background: #001a35 !important;
+    border-color: #001a35 !important;
+    color: #fff !important;
+}
+
+.s-footer__subscribe .idx-subscribe-widget input[type="submit"]:disabled {
+    opacity: 0.65 !important;
+    cursor: wait !important;
+}
+
+.s-footer__subscribe .idx-subscribe-widget #IDX-widgetUserFeedback.error {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    margin: 0 0 0.5rem !important;
+    font-size: 0.95rem !important;
+    color: #c0392b !important;
+    text-align: center !important;
+}
+
+.s-footer__subscribe .idx-subscribe-wrap .mc-status {
+    margin-top: 0.5rem;
+    font-size: calc(var(--text-size) * 0.8889);
+}
+
+@media screen and (max-width: 600px) {
+    .s-footer__subscribe .idx-subscribe-widget form {
+        display: block !important;
+    }
+
+    .s-footer__subscribe .idx-subscribe-widget input[name="email"],
+    .s-footer__subscribe .idx-subscribe-widget input[type="submit"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+        border-radius: var(--border-radius) !important;
+    }
+
+    .s-footer__subscribe .idx-subscribe-widget input[name="email"] {
+        text-align: center !important;
+    }
 }
 
 @media screen and (max-width: 1200px) {

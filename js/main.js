@@ -23,23 +23,7 @@
         return typeof p === 'string' && p.indexOf('/.netlify/functions/') !== -1;
     }
     window.fetch = function (url, init) {
-        var path = fnPath(url);
-        var reqInit = init || {};
-
-        // Auto-attach page context for newsletter signup calls.
-        if (path.indexOf('/.netlify/functions/subscribe') === 0 && reqInit && reqInit.body && typeof reqInit.body === 'string') {
-            try {
-                var payload = JSON.parse(reqInit.body);
-                if (payload && typeof payload === 'object' && !payload.sourcePage) {
-                    payload.sourcePage = window.location.href;
-                    reqInit = Object.assign({}, reqInit, { body: JSON.stringify(payload) });
-                }
-            } catch (e) {
-                // Keep original body if it is not JSON.
-            }
-        }
-
-        return origFetch.call(this, url, reqInit).then(function (res) {
+        return origFetch.call(this, url, init || {}).then(function (res) {
             var p = fnPath(url);
             if (!isNetlifyFunctionUrl(p) || res.ok) return res;
             /* Previously this ran on production too: relative URLs match, so real 405/500
@@ -249,74 +233,6 @@
         });
 
     }; // end ssMasonry
-
-
-   /* blog list from blogs/manifest.json (home page only)
-    * Replaces static entries when manifest loads; on failure keeps static content and still runs pagination/masonry.
-    * ------------------------------------------------------ */
-    const ssBlogList = function() {
-
-        const pageWrap = document.querySelector('.s-pagewrap');
-        const bricks = document.querySelector('.bricks');
-        const wrapper = document.querySelector('.bricks-wrapper');
-        if (!(pageWrap && pageWrap.classList.contains('ss-home') && bricks && wrapper)) return;
-
-        function escapeHtml(s) {
-            if (!s) return '';
-            var div = document.createElement('div');
-            div.textContent = s;
-            return div.innerHTML;
-        }
-
-        function replaceWithManifest(posts) {
-            wrapper.querySelectorAll('.entry').forEach(function(el) { el.remove(); });
-            posts.forEach(function(post) {
-                var href = 'blogs/' + (post.file || '');
-                var img = post.image || 'images/thumbs/masonry/statue-600.jpg';
-                var img2x = post.image2x || post.image || 'images/thumbs/masonry/statue-1200.jpg';
-                var title = post.title || 'Untitled';
-                var excerpt = post.excerpt || '';
-                var category = post.category || 'Uncategorized';
-                var author = post.author || 'Spurgeon';
-                var article = document.createElement('article');
-                article.className = 'brick entry';
-                article.setAttribute('data-animate-el', '');
-                article.innerHTML =
-                    '<div class="entry__thumb">' +
-                    '<a href="' + href + '" class="thumb-link">' +
-                    '<img src="' + img + '" srcset="' + img + ' 1x, ' + img2x + ' 2x" alt="">' +
-                    '</a></div>' +
-                    '<div class="entry__text">' +
-                    '<div class="entry__header">' +
-                    '<div class="entry__meta">' +
-                    '<span class="cat-links"><a href="category.html">' + escapeHtml(category) + '</a></span>' +
-                    '<span class="byline">By: <a href="#0">' + escapeHtml(author) + '</a></span>' +
-                    '</div>' +
-                    '<h1 class="entry__title"><a href="' + href + '">' + escapeHtml(title) + '</a></h1>' +
-                    '</div>' +
-                    '<div class="entry__excerpt"><p>' + escapeHtml(excerpt) + '</p></div>' +
-                    '<a class="entry__more-link" href="' + href + '">Read More</a>' +
-                    '</div>';
-                wrapper.appendChild(article);
-            });
-        }
-
-        function initBricks() {
-            ssPagination();
-            ssMasonry();
-        }
-
-        fetch('blogs/manifest.json')
-            .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('Not ok')); })
-            .then(function(data) {
-                var posts = (data && data.posts) ? data.posts : [];
-                if (posts.length > 0) replaceWithManifest(posts);
-                initBricks();
-            })
-            .catch(function() {
-                initBricks();
-            });
-    }; // end ssBlogList
 
 
    /* pagination (bricks)
@@ -625,9 +541,7 @@
         ssStickyHeader();
         ssMobileMenu();
         ssSearch();
-        if (document.querySelector('.s-pagewrap.ss-home .bricks-wrapper')) {
-            ssBlogList();
-        } else {
+        if (document.querySelector('.bricks-wrapper')) {
             ssPagination();
             ssMasonry();
         }

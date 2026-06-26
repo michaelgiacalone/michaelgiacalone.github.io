@@ -1,26 +1,23 @@
-# How to view the site (so blog posts from manifest show on index)
+# How to view the site locally
 
-**Don’t open `index.html` by double‑clicking.** That loads the page as a file (`file:///...`), and the browser will not load `blogs/manifest.json`, so the blog list won’t come from the manifest.
+**Don’t open HTML files by double‑clicking** (`file:///...`). Use a local web server from the project root.
 
-**Use a local web server instead.** From the **project root** (the folder that contains `index.html` and `blogs/`), run one of these:
-
-### Option 1 – Python (no install if you have Python)
+## Public site preview
 
 ```bash
-# Python 3
 python3 -m http.server 8000
 ```
 
-Then in your browser open: **http://localhost:8000**
+Open **http://localhost:8000**
 
-### Option 2 – Node (if you have Node/npm)
+Layout, navigation, and IDX widgets load. Footer subscribe and PME modal **require Netlify functions** — use `npx netlify-cli dev` to test leads locally.
+
+## Insights editor (private tools)
+
+`insightsCreator.html` and `instructions.html` are for article publishing on your machine only. They are blocked on the live Netlify deploy.
 
 ```bash
-npx serve .
+python3 -m http.server 8000
 ```
 
-Then open the URL it prints (e.g. **http://localhost:3000**).
-
----
-
-After that, the home page will load over `http://`, `fetch('blogs/manifest.json')` will work, and the posts from `blogs/manifest.json` will appear on the index.
+Open **http://localhost:8000/insightsCreator.html**

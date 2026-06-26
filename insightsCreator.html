@@ -671,22 +671,22 @@ hyperlink label=&quot;Request a private market evaluation&quot; url=&quot;#pme-r
     function authorProfile(name) {
         var profiles = {
             'Michael Giacalone': {
-                photo: ARTICLE_ROOT + 'assets/test_michael.jpg',
+                photo: ARTICLE_ROOT + 'assets/michael.jpg',
                 title: 'Global Real Estate Advisor · Premier Sotheby\'s International Realty · Naples, FL',
                 bio: 'With more than 17 years of distinguished experience and over 350 successful transactions, Michael Giacalone is a trusted global real estate advisor with Premier Sotheby\'s International Realty Broad Avenue office in Naples. Originally from New Jersey, Michael has been consistently recognized among the industry\'s top performers, earning membership in the RE/MAX Hall of Fame and ranking among the Top 100 RE/MAX Agents in New Jersey.'
             },
             'Paul Arpin': {
-                photo: ARTICLE_ROOT + 'assets/test_paul.jpg',
+                photo: ARTICLE_ROOT + 'assets/paul.jpg',
                 title: 'Luxury Real Estate Advisor · Premier Sotheby\'s International Realty · Naples, FL',
                 bio: 'Paul brings over 25 years of luxury real estate experience across Naples and Southwest Florida, guiding buyers and sellers through the region\'s most significant transactions.'
             },
             'Peter Reppucci': {
-                photo: ARTICLE_ROOT + 'assets/test_pete.jpg',
+                photo: ARTICLE_ROOT + 'assets/pete.jpg',
                 title: 'Luxury Real Estate Advisor · Premier Sotheby\'s International Realty · Naples, FL',
                 bio: 'Peter serves Naples luxury buyers and sellers with deep local expertise and a client-first approach across the Gulf Coast\'s premier communities.'
             },
             'ARG Naples': {
-                photo: ARTICLE_ROOT + 'assets/test_michael.jpg',
+                photo: ARTICLE_ROOT + 'assets/michael.jpg',
                 title: 'Premier Sotheby\'s International Realty · Naples, FL',
                 bio: 'ARG Naples delivers concierge-level service across Naples\' most prestigious communities — Port Royal, Olde Naples, Aqualane Shores, and beyond.'
             }
@@ -752,11 +752,10 @@ hyperlink label=&quot;Request a private market evaluation&quot; url=&quot;#pme-r
             '                <div class="column lg-12">\n' +
             '                    <h2>Looking to buy or sell?</h2>\n' +
             '                    <p>Let us know how we can help you.</p>\n' +
-            '                    <form id="mc-form" class="mc-form">\n' +
-            '                        <input type="email" name="EMAIL" id="mce-EMAIL" class="u-fullwidth text-center" placeholder="Your Email Address" required>\n' +
-            '                        <input type="submit" name="subscribe" value="Subscribe" class="btn--small btn--primary u-fullwidth">\n' +
-            '                        <div class="mc-status"></div>\n' +
-            '                    </form>\n' +
+            '                    <div class="idx-subscribe-wrap mc-form">\n' +
+            '                        <div id="idxSubscribeWidget" class="idx-subscribe-widget"></div>\n' +
+            '                        <div class="mc-status" id="idx-subscribe-status" aria-live="polite"></div>\n' +
+            '                    </div>\n' +
             '                </div>\n' +
             '            </div>\n' +
             '            <div class="row s-footer__main">\n' +
@@ -854,6 +853,8 @@ hyperlink label=&quot;Request a private market evaluation&quot; url=&quot;#pme-r
             '    </div>\n' +
             '    <script src="' + r + 'js/plugins.js"><\/script>\n' +
             '    <script src="' + r + 'js/main.js"><\/script>\n' +
+            '    <script src="' + r + 'js/site-footer.js"><\/script>\n' +
+            '    <script src="' + r + 'js/idx-broker-shim.js"><\/script>\n' +
             '    <script src="' + r + 'js/subscribe-footer.js"><\/script>\n' +
             '    <script src="' + r + 'js/pme-modal.js"><\/script>\n' +
             '</body>\n</html>';
