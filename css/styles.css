@@ -102,6 +102,26 @@
     src: local('Segoe UI Bold'), local('Segoe UI');
 }
 
+.arg-call-btn {
+  display: inline-block;
+  background-color: #111111; /* Sleek dark tone matching luxury branding */
+  color: #ffffff;
+  padding: 12px 28px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 0px; /* Sharp edges fit luxury real estate motifs well */
+  transition: background-color 0.3s ease;
+}
+
+.arg-call-btn:hover {
+  background-color: #c5a880; /* Subtle champagne/gold accent on hover */
+  color: #ffffff;
+}
+
 :root {
     --font-body : "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     --font-serif    : "Segoe UI", system-ui, sans-serif;
